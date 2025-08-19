@@ -5,11 +5,14 @@ namespace App\Controller\Admin;
 use App\Entity\Demande;
 use App\Entity\Category;
 use App\Entity\Devis;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
 
 class DemandeCrudController extends AbstractCrudController
 {
@@ -28,6 +31,34 @@ class DemandeCrudController extends AbstractCrudController
         ;
     }
 
+    public function createEntity(string $entityfcqn){
+        $demande = new Demande();
+        $demande -> setUser ($this ->getUser());
+        return $demande;
+    } 
+
+    public function configureFields(string $pageName): iterable
+    {
+        return [
+           
+            TextField::new('nom'),
+            TextField::new('prenom'),
+            TextField::new('description'),
+            AssociationField::new('category'),
+            
+            
+        ];
+    }
+
+
+     public function configureFilters(Filters $filters): Filters
+    {
+        return $filters
+            ->add(EntityFilter::new('category'))
+            ->add(EntityFilter::new('user'))
+            
+        ;
+    }
     /*
     public function configureFields(string $pageName): iterable
     {

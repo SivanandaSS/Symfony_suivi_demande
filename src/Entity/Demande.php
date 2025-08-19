@@ -4,32 +4,53 @@ namespace App\Entity;
 
 use App\Repository\DemandeRepository;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: DemandeRepository::class)]
+
+#[ApiResource(
+    operations: [
+        new Get(normalizationContext: ['groups' => 'demande:item']),
+        new GetCollection(normalizationContext: ['groups' => 'demande:list'])
+    ],
+    order: ['id' => 'DESC'],
+    paginationEnabled: false,
+)]
+
+
 class Demande
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['demande:list', 'demande:item'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
+    #[Groups(['demande:list', 'demande:item'])]
     private ?string $nom = null;
 
     #[ORM\Column(length: 100)]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 200)]
+    #[Groups(['demande:list', 'demande:item'])]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'demandes')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['demande:list', 'demande:item'])]
     private ?Category $category = null;
 
     #[ORM\OneToOne(inversedBy: 'demande', cascade: ['persist', 'remove'])]
+    #[Groups(['demande:list', 'demande:item'])]
     private ?Devis $devis = null;
 
     #[ORM\ManyToOne(inversedBy: 'demandes')]
+    #[Groups(['demande:list', 'demande:item'])]
     private ?User $user = null;
 
     public function getId(): ?int
