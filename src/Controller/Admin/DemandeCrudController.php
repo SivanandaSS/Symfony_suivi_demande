@@ -21,8 +21,8 @@ class DemandeCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setEntityLabelInSingular('La demande')
-            ->setEntityLabelInPlural('Les demandes')
+            ->setEntityLabelInSingular('demande.La demande')
+            ->setEntityLabelInPlural('demande.Les demandes')
             ->setSearchFields(['nom', 'category'])
             ->setDefaultSort(['id' => 'ASC'])
         ;
