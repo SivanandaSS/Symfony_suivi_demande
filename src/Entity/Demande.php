@@ -24,13 +24,13 @@ class Demande
 
     #[ORM\ManyToOne(inversedBy: 'demandes')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?category $category = null;
+    private ?Category $category = null;
 
     #[ORM\OneToOne(inversedBy: 'demande', cascade: ['persist', 'remove'])]
-    private ?devis $devis = null;
+    private ?Devis $devis = null;
 
     #[ORM\ManyToOne(inversedBy: 'demandes')]
-    private ?user $user = null;
+    private ?User $user = null;
 
     public function getId(): ?int
     {
@@ -78,34 +78,39 @@ class Demande
         return $this->category;
     }
 
-    public function setCategory(?category $category): static
+    public function setCategory(?Category $category): static
     {
         $this->category = $category;
 
         return $this;
     }
 
-    public function getDevis(): ?devis
+    public function getDevis(): ?Devis
     {
         return $this->devis;
     }
 
-    public function setDevis(?devis $devis): static
+    public function setDevis(?Devis $devis): static
     {
         $this->devis = $devis;
 
         return $this;
     }
 
-    public function getUser(): ?user
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUser(?user $user): static
+    public function setUser(?User $user): static
     {
         $this->user = $user;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->name;
     }
 }

@@ -25,11 +25,11 @@ class Devis
     /**
      * @var Collection<int, prestation>
      */
-    #[ORM\ManyToMany(targetEntity: prestation::class, inversedBy: 'devis')]
+    #[ORM\ManyToMany(targetEntity: Prestation::class, inversedBy: 'devis')]
     private Collection $prestation;
 
     #[ORM\OneToOne(inversedBy: 'devis', cascade: ['persist', 'remove'])]
-    private ?facture $facture = null;
+    private ?Facture $facture = null;
 
     public function __construct()
     {
@@ -83,7 +83,7 @@ class Devis
         return $this->prestation;
     }
 
-    public function addPrestation(prestation $prestation): static
+    public function addPrestation(Prestation $prestation): static
     {
         if (!$this->prestation->contains($prestation)) {
             $this->prestation->add($prestation);
@@ -92,22 +92,27 @@ class Devis
         return $this;
     }
 
-    public function removePrestation(prestation $prestation): static
+    public function removePrestation(Prestation $prestation): static
     {
         $this->prestation->removeElement($prestation);
 
         return $this;
     }
 
-    public function getFacture(): ?facture
+    public function getFacture(): ?Facture
     {
         return $this->facture;
     }
 
-    public function setFacture(?facture $facture): static
+    public function setFacture(?Facture $facture): static
     {
         $this->facture = $facture;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->name;
     }
 }
