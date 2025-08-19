@@ -8,27 +8,48 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use Symfony\Component\Serializer\Attribute\Groups;
+
 #[ORM\Entity(repositoryClass: DevisRepository::class)]
+
+#[ApiResource(
+    operations: [
+        new Get(normalizationContext: ['groups' => 'devis:item']),
+        new GetCollection(normalizationContext: ['groups' => 'devis:list'])
+    ],
+    order: ['id' => 'DESC'],
+    paginationEnabled: false,
+)]
+
+
 class Devis
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['devis:list', 'devis:item'])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    #[Groups(['devis:list', 'devis:item'])]
     private ?string $total = null;
 
     #[ORM\OneToOne(mappedBy: 'devis', cascade: ['persist', 'remove'])]
+    #[Groups(['devis:list', 'devis:item'])]
     private ?Demande $demande = null;
 
     /**
      * @var Collection<int, prestation>
      */
     #[ORM\ManyToMany(targetEntity: Prestation::class, inversedBy: 'devis')]
+    #[Groups(['devis:list', 'devis:item'])]
     private Collection $prestation;
 
     #[ORM\OneToOne(inversedBy: 'devis', cascade: ['persist', 'remove'])]
+    #[Groups(['devis:list', 'devis:item'])]
     private ?Facture $facture = null;
 
     public function __construct()
