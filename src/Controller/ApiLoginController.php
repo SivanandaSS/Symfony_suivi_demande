@@ -30,14 +30,27 @@ final class ApiLoginController extends AbstractController
         $entityManager->flush();
 
         return $this->json([
+            'id'    => $user->getId(),
             'user'  => $user->getUserIdentifier(),
             'token' => $token,
         ]);
     }
 
     #[Route(path: '/api/logout', name: 'api_logout')]
-    public function logout(): void
+    public function logout(#[CurrentUser] ?User $user, EntityManagerInterface $entityManager ): void
     {
-        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+        if (null === $user) {
+            return $this->json([
+                'message' => 'missing credentials',
+            ], Response::HTTP_UNAUTHORIZED);
+        }
+    
+        $user->setApiKey(null);
+        $entityManager->persist($user);
+        $entityManager->flush();
+    
+        return $this->json([
+            'message' => 'Logged out successfully'
+        ]);
     }
 }
