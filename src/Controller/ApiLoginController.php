@@ -22,7 +22,7 @@ final class ApiLoginController extends AbstractController
             ], Response::HTTP_UNAUTHORIZED);
         }
 
-         $token = Uuid::v4()->toRfc4122(); // somehow create an API token for $user
+        $token = Uuid::v4()->toRfc4122(); // somehow create an API token for $user
 
         $user->setApiKey($token);
 
