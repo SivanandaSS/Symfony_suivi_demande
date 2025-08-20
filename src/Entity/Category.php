@@ -13,14 +13,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 
-#[ApiResource(
-    operations: [
-        new Get(normalizationContext: ['groups' => 'category:item']),
-        new GetCollection(normalizationContext: ['groups' => 'category:list'])
-    ],
-    order: ['nom' => 'DESC'],
-    paginationEnabled: false,
-)]
+#[ApiResource]
 
 class Category
 {

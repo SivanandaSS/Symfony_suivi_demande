@@ -11,14 +11,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: DemandeRepository::class)]
 
-#[ApiResource(
-    operations: [
-        new Get(normalizationContext: ['groups' => 'demande:item']),
-        new GetCollection(normalizationContext: ['groups' => 'demande:list'])
-    ],
-    order: ['id' => 'DESC'],
-    paginationEnabled: false,
-)]
+#[ApiResource]
 
 
 class Demande
