@@ -37,7 +37,7 @@ final class ApiLoginController extends AbstractController
     }
 
     #[Route(path: '/api/logout', name: 'api_logout')]
-    public function logout(#[CurrentUser] ?User $user, EntityManagerInterface $entityManager ): void
+    public function logout(#[CurrentUser] ?User $user, EntityManagerInterface $entityManager ): Response
     {
         if (null === $user) {
             return $this->json([
