@@ -7,8 +7,21 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: PrestationRepository::class)]
+
+#[ApiResource(
+    operations: [
+        new Get(normalizationContext: ['groups' => 'prestation:item']),
+        new GetCollection(normalizationContext: ['groups' => 'prestation:list'])
+    ],
+    order: ['nom' => 'DESC'],
+    paginationEnabled: false,
+)]
 class Prestation
 {
     #[ORM\Id]
@@ -17,9 +30,11 @@ class Prestation
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
+    #[Groups(['prestation:list', 'prestation:item'])]
     private ?string $nom = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    #[Groups(['prestation:list', 'prestation:item'])]
     private ?string $pu = null;
 
     /**
@@ -87,5 +102,9 @@ class Prestation
         }
 
         return $this;
+    }
+    public function __toString(): string
+    {
+        return $this->nom;
     }
 }

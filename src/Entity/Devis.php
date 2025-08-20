@@ -8,28 +8,49 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use Symfony\Component\Serializer\Attribute\Groups;
+
 #[ORM\Entity(repositoryClass: DevisRepository::class)]
+
+#[ApiResource(
+    operations: [
+        new Get(normalizationContext: ['groups' => 'devis:item']),
+        new GetCollection(normalizationContext: ['groups' => 'devis:list'])
+    ],
+    order: ['id' => 'DESC'],
+    paginationEnabled: false,
+)]
+
+
 class Devis
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['devis:list', 'devis:item'])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    #[Groups(['devis:list', 'devis:item'])]
     private ?string $total = null;
 
     #[ORM\OneToOne(mappedBy: 'devis', cascade: ['persist', 'remove'])]
+    #[Groups(['devis:list', 'devis:item'])]
     private ?Demande $demande = null;
 
     /**
      * @var Collection<int, prestation>
      */
-    #[ORM\ManyToMany(targetEntity: prestation::class, inversedBy: 'devis')]
+    #[ORM\ManyToMany(targetEntity: Prestation::class, inversedBy: 'devis')]
+    #[Groups(['devis:list', 'devis:item'])]
     private Collection $prestation;
 
     #[ORM\OneToOne(inversedBy: 'devis', cascade: ['persist', 'remove'])]
-    private ?facture $facture = null;
+    #[Groups(['devis:list', 'devis:item'])]
+    private ?Facture $facture = null;
 
     public function __construct()
     {
@@ -83,7 +104,7 @@ class Devis
         return $this->prestation;
     }
 
-    public function addPrestation(prestation $prestation): static
+    public function addPrestation(Prestation $prestation): static
     {
         if (!$this->prestation->contains($prestation)) {
             $this->prestation->add($prestation);
@@ -92,22 +113,23 @@ class Devis
         return $this;
     }
 
-    public function removePrestation(prestation $prestation): static
+    public function removePrestation(Prestation $prestation): static
     {
         $this->prestation->removeElement($prestation);
 
         return $this;
     }
 
-    public function getFacture(): ?facture
+    public function getFacture(): ?Facture
     {
         return $this->facture;
     }
 
-    public function setFacture(?facture $facture): static
+    public function setFacture(?Facture $facture): static
     {
         $this->facture = $facture;
 
         return $this;
     }
+
 }

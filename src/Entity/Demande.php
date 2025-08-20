@@ -4,33 +4,48 @@ namespace App\Entity;
 
 use App\Repository\DemandeRepository;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: DemandeRepository::class)]
+
+#[ApiResource]
+
+
 class Demande
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['demande:list', 'demande:item'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
+    #[Groups(['demande:list', 'demande:item'])]
     private ?string $nom = null;
 
     #[ORM\Column(length: 100)]
+    #[Groups(['demande:list', 'demande:item'])]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 200)]
+    #[Groups(['demande:list', 'demande:item'])]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'demandes')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?category $category = null;
+    #[Groups(['demande:list', 'demande:item'])]
+    private ?Category $category = null;
 
     #[ORM\OneToOne(inversedBy: 'demande', cascade: ['persist', 'remove'])]
-    private ?devis $devis = null;
+    #[Groups(['demande:list', 'demande:item'])]
+    private ?Devis $devis = null;
 
     #[ORM\ManyToOne(inversedBy: 'demandes')]
-    private ?user $user = null;
+    #[Groups(['demande:list', 'demande:item'])]
+    private ?User $user = null;
 
     public function getId(): ?int
     {
@@ -78,34 +93,39 @@ class Demande
         return $this->category;
     }
 
-    public function setCategory(?category $category): static
+    public function setCategory(?Category $category): static
     {
         $this->category = $category;
 
         return $this;
     }
 
-    public function getDevis(): ?devis
+    public function getDevis(): ?Devis
     {
         return $this->devis;
     }
 
-    public function setDevis(?devis $devis): static
+    public function setDevis(?Devis $devis): static
     {
         $this->devis = $devis;
 
         return $this;
     }
 
-    public function getUser(): ?user
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUser(?user $user): static
+    public function setUser(?User $user): static
     {
         $this->user = $user;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->nom;
     }
 }

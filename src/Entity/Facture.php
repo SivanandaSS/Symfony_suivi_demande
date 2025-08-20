@@ -4,8 +4,21 @@ namespace App\Entity;
 
 use App\Repository\FactureRepository;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: FactureRepository::class)]
+#[ApiResource(
+    operations: [
+        new Get(normalizationContext: ['groups' => 'facture:item']),
+        new GetCollection(normalizationContext: ['groups' => 'facture:list'])
+    ],
+    order: ['id' => 'DESC'],
+    paginationEnabled: false,
+)]
+
 class Facture
 {
     #[ORM\Id]
@@ -15,6 +28,10 @@ class Facture
 
     #[ORM\OneToOne(mappedBy: 'facture', cascade: ['persist', 'remove'])]
     private ?Devis $devis = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['facture:list', 'facture:item'])]
+    private ?string $facture = null;
 
     public function getId(): ?int
     {
@@ -42,4 +59,18 @@ class Facture
 
         return $this;
     }
+
+    public function getFacture(): ?string
+    {
+        return $this->facture;
+    }
+
+    public function setFacture(?string $facture): static
+    {
+        $this->facture = $facture;
+
+        return $this;
+    }
+
+
 }
