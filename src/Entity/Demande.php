@@ -34,6 +34,7 @@ class Demande
     private ?string $nom = null;
 
     #[ORM\Column(length: 100)]
+    #[Groups(['demande:list', 'demande:item'])]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 200)]
