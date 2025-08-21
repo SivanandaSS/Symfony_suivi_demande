@@ -20,9 +20,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Get(normalizationContext: ['groups' => 'devis:item']),
         new GetCollection(normalizationContext: ['groups' => 'devis:list'])
     ],
-    order: ['id' => 'DESC'],
+    order: ['numero' => 'DESC'],
     paginationEnabled: false,
 )]
+
 
 
 class Devis
@@ -49,15 +50,19 @@ class Devis
      * @var Collection<int, DevisPrestation>
      */
     #[ORM\OneToMany(targetEntity: DevisPrestation::class, mappedBy: 'devis')]
+    #[Groups(['devis:list', 'devis:item'])]
     private Collection $devisPrestations;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['devis:list', 'devis:item'])]
     private ?string $numero = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['devis:list', 'devis:item'])]
     private ?string $statut = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['devis:list', 'devis:item'])]
     private ?\DateTime $date = null;
 
     public function __construct()

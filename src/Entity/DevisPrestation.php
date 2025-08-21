@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\DevisPrestationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: DevisPrestationRepository::class)]
 #[ApiResource]
@@ -17,15 +18,18 @@ class DevisPrestation
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    #[Groups(['devis:list', 'devis:item'])]
     private ?string $quantity = null;
 
     #[ORM\ManyToOne(inversedBy: 'devisPrestations')]
     private ?Devis $devis = null;
 
     #[ORM\ManyToOne(inversedBy: 'devisPrestations')]
+    #[Groups(['devis:list', 'devis:item'])]
     private ?Prestation $prestation = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    #[Groups(['devis:list', 'devis:item'])]
     private ?string $soustotal = null;
 
     public function getId(): ?int

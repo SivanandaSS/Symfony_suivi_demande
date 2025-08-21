@@ -23,11 +23,11 @@ class Prestation
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
-    #[Groups(['prestation:list', 'prestation:item'])]
+    #[Groups(['prestation:list', 'prestation:item','devis:list', 'devis:item'])]
     private ?string $nom = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
-    #[Groups(['prestation:list', 'prestation:item'])]
+    #[Groups(['prestation:list', 'prestation:item', 'devis:list', 'devis:item'])]
     private ?string $pu = null;
 
     /**
