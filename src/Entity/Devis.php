@@ -41,20 +41,29 @@ class Devis
     #[Groups(['devis:list', 'devis:item'])]
     private ?Demande $demande = null;
 
-    /**
-     * @var Collection<int, prestation>
-     */
-    #[ORM\ManyToMany(targetEntity: Prestation::class, inversedBy: 'devis')]
-    #[Groups(['devis:list', 'devis:item'])]
-    private Collection $prestation;
-
     #[ORM\OneToOne(inversedBy: 'devis', cascade: ['persist', 'remove'])]
     #[Groups(['devis:list', 'devis:item'])]
     private ?Facture $facture = null;
 
+    /**
+     * @var Collection<int, DevisPrestation>
+     */
+    #[ORM\OneToMany(targetEntity: DevisPrestation::class, mappedBy: 'devis')]
+    private Collection $devisPrestations;
+
+    #[ORM\Column(length: 255)]
+    private ?string $numero = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $statut = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTime $date = null;
+
     public function __construct()
     {
         $this->prestation = new ArrayCollection();
+        $this->devisPrestations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -96,30 +105,6 @@ class Devis
         return $this;
     }
 
-    /**
-     * @return Collection<int, prestation>
-     */
-    public function getPrestation(): Collection
-    {
-        return $this->prestation;
-    }
-
-    public function addPrestation(Prestation $prestation): static
-    {
-        if (!$this->prestation->contains($prestation)) {
-            $this->prestation->add($prestation);
-        }
-
-        return $this;
-    }
-
-    public function removePrestation(Prestation $prestation): static
-    {
-        $this->prestation->removeElement($prestation);
-
-        return $this;
-    }
-
     public function getFacture(): ?Facture
     {
         return $this->facture;
@@ -128,6 +113,72 @@ class Devis
     public function setFacture(?Facture $facture): static
     {
         $this->facture = $facture;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DevisPrestation>
+     */
+    public function getDevisPrestations(): Collection
+    {
+        return $this->devisPrestations;
+    }
+
+    public function addDevisPrestation(DevisPrestation $devisPrestation): static
+    {
+        if (!$this->devisPrestations->contains($devisPrestation)) {
+            $this->devisPrestations->add($devisPrestation);
+            $devisPrestation->setDevis($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDevisPrestation(DevisPrestation $devisPrestation): static
+    {
+        if ($this->devisPrestations->removeElement($devisPrestation)) {
+            // set the owning side to null (unless already changed)
+            if ($devisPrestation->getDevis() === $this) {
+                $devisPrestation->setDevis(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getNumero(): ?string
+    {
+        return $this->numero;
+    }
+
+    public function setNumero(string $numero): static
+    {
+        $this->numero = $numero;
+
+        return $this;
+    }
+
+    public function getStatut(): ?string
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(string $statut): static
+    {
+        $this->statut = $statut;
+
+        return $this;
+    }
+
+    public function getDate(): ?\DateTime
+    {
+        return $this->date;
+    }
+
+    public function setDate(\DateTime $date): static
+    {
+        $this->date = $date;
 
         return $this;
     }
