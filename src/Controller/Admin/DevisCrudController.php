@@ -57,11 +57,6 @@ class DevisCrudController extends AbstractCrudController
                 ]),
 
             NumberField::new('total')
-                ->onlyOnIndex()
-                ->setLabel('Total (€)'),
-
-            NumberField::new('total')
-                ->onlyOnDetail()
                 ->setLabel('Total (€)'),
 
             AssociationField::new('demande')->setCrudController(DemandeCrudController::class),
@@ -70,7 +65,6 @@ class DevisCrudController extends AbstractCrudController
                 ->useEntryCrudForm(DevisPrestationCrudController::class)
                 ->setLabel('Prestations du devis')
                 ->onlyOnForms()
-                ->addJsFiles('build/admin.js'),
         ];
     }
 
@@ -88,7 +82,7 @@ class DevisCrudController extends AbstractCrudController
         foreach ($devis->getDevisPrestations() as $ligne) {
             $total += (float) $ligne->getSoustotal();
         }
-        $devis->setTotal((string) $total);
+        $devis->setTotal($total);
     }
 
 }

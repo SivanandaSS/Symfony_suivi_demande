@@ -4,6 +4,8 @@ setInterval(function() {
     
     if (!collectionContainer) return;
 
+    let total = 0;
+
     collectionContainer.querySelectorAll("select.form-select").forEach((elt)=> {
         console.log(elt.options[elt.selectedIndex].dataset.pu);
         const selectedOption = elt.options[elt.selectedIndex];
@@ -25,9 +27,11 @@ setInterval(function() {
         const soustotalInput = entry.querySelector('input[id$="_soustotal"]');
         soustotalInput.value = sousTotal;
 
-
+        total += sousTotal;
     });
     
+    const totalInput = document.querySelector('input[id$="_total"]');
+    if (totalInput) totalInput.value = total.toFixed(2);
 
 }
 ,1000);
