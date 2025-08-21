@@ -24,7 +24,7 @@ class DevisPrestationCrudController extends AbstractCrudController
     {
         return $assets
 
-        ->addJsFile('build/admin.js');
+        ->addJsFile('js/admin.js');
     }
     
     public function configureCrud(Crud $crud): Crud
@@ -51,6 +51,7 @@ class DevisPrestationCrudController extends AbstractCrudController
 
         $puField = NumberField::new('pu')
             ->setLabel('Prix Unitaire (€)')
+            
             ->setFormTypeOption('disabled', true); // lecture seule
 
         $quantityField = NumberField::new('quantity')

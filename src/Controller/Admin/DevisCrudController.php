@@ -25,12 +25,12 @@ class DevisCrudController extends AbstractCrudController
         return Devis::class;
     }
 
-    // public function configureAssets(Assets $assets): Assets
-    // {
-    //     return $assets
+    public function configureAssets(Assets $assets): Assets
+    {
+        return $assets
 
-    //     ->addJsFile('build/admin.js');
-    // }
+        ->addJsFile('build/admin.js');
+    }
 
     public function configureCrud(Crud $crud): Crud
     {
