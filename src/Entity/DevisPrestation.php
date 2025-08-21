@@ -41,6 +41,7 @@ class DevisPrestation
     public function setQuantity(string $quantity): static
     {
         $this->quantity = $quantity;
+        $this->updateSousTotal();
 
         return $this;
     }
@@ -60,12 +61,14 @@ class DevisPrestation
     public function getPrestation(): ?Prestation
     {
         return $this->prestation;
+
     }
 
     public function setPrestation(?Prestation $prestation): static
     {
         $this->prestation = $prestation;
-
+        $this->updateSousTotal();
+        
         return $this;
     }
 
@@ -79,5 +82,17 @@ class DevisPrestation
         $this->soustotal = $soustotal;
 
         return $this;
+    }
+
+    private function updateSousTotal(): void
+    {
+        if ($this->prestation && $this->quantity !== null) {
+            $this->soustotal = bcmul($this->quantity, $this->prestation->getPu(), 2);
+        }
+    }
+
+    public function getPu(): ?string
+    {
+        return $this->prestation?->getPu();
     }
 }
