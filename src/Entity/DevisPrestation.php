@@ -95,4 +95,13 @@ class DevisPrestation
     {
         return $this->prestation?->getPu();
     }
+
+    public function __toString(): string
+    {
+    return sprintf("Prestation #%d (PU: %s, Qte: %s)", 
+        $this->getId() ?? 0,
+        $this->getPu() ?? "null",
+        $this->getQuantity() ?? "null"
+    );
+    }
 }

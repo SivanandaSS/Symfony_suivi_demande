@@ -48,7 +48,7 @@ class Devis
     /**
      * @var Collection<int, DevisPrestation>
      */
-    #[ORM\OneToMany(targetEntity: DevisPrestation::class, mappedBy: 'devis')]
+    #[ORM\OneToMany(targetEntity: DevisPrestation::class, mappedBy: 'devis', cascade: ["persist", "remove"], orphanRemoval: true)]
     private Collection $devisPrestations;
 
     #[ORM\Column(length: 255)]
@@ -64,6 +64,7 @@ class Devis
     {
         $this->prestation = new ArrayCollection();
         $this->devisPrestations = new ArrayCollection();
+        $this->date = new \DateTime();
     }
 
     public function getId(): ?int
@@ -182,5 +183,7 @@ class Devis
 
         return $this;
     }
+
+    
 
 }

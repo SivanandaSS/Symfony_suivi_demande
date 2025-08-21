@@ -13,6 +13,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 
@@ -47,6 +48,10 @@ class DevisCrudController extends AbstractCrudController
         return [
         
             IdField::new('id')->onlyOnIndex(),
+            DateField::new('date')
+                // ->setFormTypeOption('data', new \DateTime())
+                ->setFormTypeOption('disabled', true),
+
             TextField::new('numero'),
             ChoiceField::new('statut')
                 ->setLabel("statut")
@@ -68,21 +73,21 @@ class DevisCrudController extends AbstractCrudController
         ];
     }
 
-    public function updateEntity(EntityManagerInterface $em, $entityInstance): void
-    {
-        if ($entityInstance instanceof Devis) {
-            $this->recalculateTotal($entityInstance);
-        }
-        parent::updateEntity($em, $entityInstance);
-    }
+    // public function updateEntity(EntityManagerInterface $em, $entityInstance): void
+    // {
+    //     if ($entityInstance instanceof Devis) {
+    //         $this->recalculateTotal($entityInstance);
+    //     }
+    //     parent::updateEntity($em, $entityInstance);
+    // }
 
-    private function recalculateTotal(Devis $devis): void
-    {
-        $total = 0;
-        foreach ($devis->getDevisPrestations() as $ligne) {
-            $total += (float) $ligne->getSoustotal();
-        }
-        $devis->setTotal($total);
-    }
+    // private function recalculateTotal(Devis $devis): void
+    // {
+    //     $total = 0;
+    //     foreach ($devis->getDevisPrestations() as $ligne) {
+    //         $total += (float) $ligne->getSoustotal();
+    //     }
+    //     $devis->setTotal($total);
+    // }
 
 }
