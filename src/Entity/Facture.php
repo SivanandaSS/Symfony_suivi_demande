@@ -33,6 +33,9 @@ class Facture
     #[Groups(['facture:list', 'facture:item'])]
     private ?string $facture = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $numero = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -68,6 +71,18 @@ class Facture
     public function setFacture(?string $facture): static
     {
         $this->facture = $facture;
+
+        return $this;
+    }
+
+    public function getNumero(): ?string
+    {
+        return $this->numero;
+    }
+
+    public function setNumero(string $numero): static
+    {
+        $this->numero = $numero;
 
         return $this;
     }

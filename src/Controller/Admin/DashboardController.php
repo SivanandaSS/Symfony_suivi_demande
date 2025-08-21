@@ -13,6 +13,7 @@ use App\Entity\Category;
 use App\Entity\Devis;
 use App\Entity\Facture;
 use App\Entity\Prestation;
+use App\Entity\DevisPrestation;
 
 #[AdminDashboard(routePath: '/admin', routeName: 'admin')]
 class DashboardController extends AbstractDashboardController
@@ -59,6 +60,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('demande.Les devis', 'fas fa-list', Devis::class);
         yield MenuItem::linkToCrud('demande.Les factures', 'fas fa-list', Facture::class);
         yield MenuItem::linkToCrud('demande.Les prestations', 'fas fa-list', Prestation::class);
+        yield MenuItem::linkToCrud('Les devis_prestation', 'fas fa-list', DevisPrestation::class);
         
     }
 }

@@ -14,14 +14,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: PrestationRepository::class)]
 
-#[ApiResource(
-    operations: [
-        new Get(normalizationContext: ['groups' => 'prestation:item']),
-        new GetCollection(normalizationContext: ['groups' => 'prestation:list'])
-    ],
-    order: ['nom' => 'DESC'],
-    paginationEnabled: false,
-)]
+#[ApiResource]
 class Prestation
 {
     #[ORM\Id]
@@ -38,14 +31,15 @@ class Prestation
     private ?string $pu = null;
 
     /**
-     * @var Collection<int, Devis>
+     * @var Collection<int, DevisPrestation>
      */
-    #[ORM\ManyToMany(targetEntity: Devis::class, mappedBy: 'prestation')]
-    private Collection $devis;
+    #[ORM\OneToMany(targetEntity: DevisPrestation::class, mappedBy: 'prestation')]
+    private Collection $devisPrestations;
 
     public function __construct()
     {
         $this->devis = new ArrayCollection();
+        $this->devisPrestations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -77,34 +71,38 @@ class Prestation
         return $this;
     }
 
-    /**
-     * @return Collection<int, Devis>
-     */
-    public function getDevis(): Collection
-    {
-        return $this->devis;
-    }
-
-    public function addDevi(Devis $devi): static
-    {
-        if (!$this->devis->contains($devi)) {
-            $this->devis->add($devi);
-            $devi->addPrestation($this);
-        }
-
-        return $this;
-    }
-
-    public function removeDevi(Devis $devi): static
-    {
-        if ($this->devis->removeElement($devi)) {
-            $devi->removePrestation($this);
-        }
-
-        return $this;
-    }
     public function __toString(): string
     {
         return $this->nom;
+    }
+
+    /**
+     * @return Collection<int, DevisPrestation>
+     */
+    public function getDevisPrestations(): Collection
+    {
+        return $this->devisPrestations;
+    }
+
+    public function addDevisPrestation(DevisPrestation $devisPrestation): static
+    {
+        if (!$this->devisPrestations->contains($devisPrestation)) {
+            $this->devisPrestations->add($devisPrestation);
+            $devisPrestation->setPrestation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDevisPrestation(DevisPrestation $devisPrestation): static
+    {
+        if ($this->devisPrestations->removeElement($devisPrestation)) {
+            // set the owning side to null (unless already changed)
+            if ($devisPrestation->getPrestation() === $this) {
+                $devisPrestation->setPrestation(null);
+            }
+        }
+
+        return $this;
     }
 }

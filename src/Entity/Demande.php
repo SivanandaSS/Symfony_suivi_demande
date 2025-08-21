@@ -19,32 +19,32 @@ class Demande
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['demande:list', 'demande:item'])]
+    
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
-    #[Groups(['demande:list', 'demande:item'])]
+    
     private ?string $nom = null;
 
     #[ORM\Column(length: 100)]
-    #[Groups(['demande:list', 'demande:item'])]
+    
     private ?string $prenom = null;
 
     #[ORM\Column(length: 200)]
-    #[Groups(['demande:list', 'demande:item'])]
+    
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'demandes')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['demande:list', 'demande:item'])]
+    
     private ?Category $category = null;
 
     #[ORM\OneToOne(inversedBy: 'demande', cascade: ['persist', 'remove'])]
-    #[Groups(['demande:list', 'demande:item'])]
+    
     private ?Devis $devis = null;
 
     #[ORM\ManyToOne(inversedBy: 'demandes')]
-    #[Groups(['demande:list', 'demande:item'])]
+    
     private ?User $user = null;
 
     public function getId(): ?int
