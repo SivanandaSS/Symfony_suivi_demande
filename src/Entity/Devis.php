@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\GetCollection;
 use Symfony\Component\Serializer\Attribute\Groups;
 
@@ -18,7 +19,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ApiResource(
     operations: [
         new Get(normalizationContext: ['groups' => 'devis:item']),
-        new GetCollection(normalizationContext: ['groups' => 'devis:list'])
+        new GetCollection(normalizationContext: ['groups' => 'devis:list']),
+        new Patch(inputFormats: ['json' => ['application/merge-patch+json']])
     ],
     order: ['numero' => 'DESC'],
     paginationEnabled: false,
@@ -69,7 +71,7 @@ class Devis
     {
         $this->prestation = new ArrayCollection();
         $this->devisPrestations = new ArrayCollection();
-        $this->date = new \DateTime();
+        $this->date = (new \DateTime())->setTime(0, 0);
     }
 
     public function getId(): ?int
