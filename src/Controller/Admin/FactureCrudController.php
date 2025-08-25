@@ -8,6 +8,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 
 class FactureCrudController extends AbstractCrudController
 {
@@ -16,14 +17,14 @@ class FactureCrudController extends AbstractCrudController
         return Facture::class;
     }
 
-    /*
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
+            IdField::new('id')->onlyOnIndex(),
+            TextField::new('numero'),
+            AssociationField::new('devis')->setCrudController(DevisCrudController::class),
+            
         ];
     }
-    */
+
 }
