@@ -8,10 +8,13 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use Symfony\Component\Serializer\Attribute\Groups;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 
 #[ORM\Entity(repositoryClass: DemandeRepository::class)]
 
 #[ApiResource]
+#[ApiFilter(SearchFilter::class, properties: ['user' => 'exact'])]
 
 
 class Demande
