@@ -1,0 +1,18 @@
+Il faut d'abord créer la procedure SQL
+
+Pour créer le declencher de l'action (trigger), il faut :
+
+- Aller dans la table devis
+- Aller dans l'onglet declencheurs
+- Créer un déclencheur
+- Nom du déclencheur : after_devis_update
+- Table : devis
+- Moment : AFTER
+- Evènement : UPDATE
+- Définition coller : 
+    - IF NEW.statut = 'Accepter' AND OLD.statut <> 'Accepter' THEN
+    CALL create_facture_from_devis(NEW.id);
+    END IF
+
+- Pas besoin de spécifier le créateur.
+

@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\GetCollection;
 use Symfony\Component\Serializer\Attribute\Groups;
 
@@ -18,7 +19,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ApiResource(
     operations: [
         new Get(normalizationContext: ['groups' => 'devis:item']),
-        new GetCollection(normalizationContext: ['groups' => 'devis:list'])
+        new GetCollection(normalizationContext: ['groups' => 'devis:list']),
+        new Patch(inputFormats: ['json' => ['application/merge-patch+json']])
     ],
     order: ['numero' => 'DESC'],
     paginationEnabled: false,
@@ -42,9 +44,7 @@ class Devis
     #[Groups(['devis:list', 'devis:item'])]
     private ?Demande $demande = null;
 
-    #[ORM\OneToOne(inversedBy: 'devis', cascade: ['persist', 'remove'])]
-    #[Groups(['devis:list', 'devis:item'])]
-    private ?Facture $facture = null;
+
 
     /**
      * @var Collection<int, DevisPrestation>
@@ -63,13 +63,16 @@ class Devis
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Groups(['devis:list', 'devis:item'])]
-    private ?\DateTime $date = null;
+    private ?\DateTime $date_devis = null;
+
+    #[ORM\OneToOne(mappedBy: 'devis', cascade: ['persist', 'remove'])]
+    private ?Facture $facture = null;
 
     public function __construct()
     {
         $this->prestation = new ArrayCollection();
         $this->devisPrestations = new ArrayCollection();
-        $this->date = new \DateTime();
+        $this->date_devis = (new \DateTime())->setTime(0, 0);
     }
 
     public function getId(): ?int
@@ -107,18 +110,6 @@ class Devis
         }
 
         $this->demande = $demande;
-
-        return $this;
-    }
-
-    public function getFacture(): ?Facture
-    {
-        return $this->facture;
-    }
-
-    public function setFacture(?Facture $facture): static
-    {
-        $this->facture = $facture;
 
         return $this;
     }
@@ -177,18 +168,38 @@ class Devis
         return $this;
     }
 
-    public function getDate(): ?\DateTime
+    public function getDate_devis(): ?\DateTime
     {
-        return $this->date;
+        return $this->date_devis;
     }
 
-    public function setDate(\DateTime $date): static
+    public function setDate_devis(\DateTime $date_devis): static
     {
-        $this->date = $date;
+        $this->date_devis = $date_devis;
 
         return $this;
     }
 
-    
+    public function __toString(): string
+    {
+        return $this->numero;
+    }
+
+    public function getFacture(): ?Facture
+    {
+        return $this->facture;
+    }
+
+    public function setFacture(Facture $facture): static
+    {
+        // set the owning side of the relation if necessary
+        if ($facture->getDevis() !== $this) {
+            $facture->setDevis($this);
+        }
+
+        $this->facture = $facture;
+
+        return $this;
+    }
 
 }
