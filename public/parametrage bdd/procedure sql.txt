@@ -1,0 +1,42 @@
+Pour créer une Procédures stokées dans votre BDD, il faut :
+
+- Aller à la racine de votre bdd
+- Aller dans l'onglet Procédures stockées
+- Créer une Procédure
+- Nom de la procédure : create_facture_from_devis
+- Type : PROCEDURE
+- Paramètre : 
+  - Direction : IN
+  - Nom : devisId
+  - Type : INT
+- Copier le text dans Définition :
+  - BEGIN
+    DECLARE vNumero VARCHAR(50);
+      DECLARE vTotal DECIMAL(10,2);
+      DECLARE vDate DATE;
+      DECLARE vFactureId INT;
+
+      IF EXISTS (SELECT 1 FROM facture WHERE devis_id = devisId) THEN
+      SET vFactureId = NULL;
+      ELSE
+          -- Récupérer les infos du devis
+          SELECT numero, total, date_devis INTO vNumero, vTotal, vDate
+          FROM devis WHERE id = devisId LIMIT 1;
+
+          -- Insérer la facture
+          INSERT INTO facture (numero, date_emission, total, devis_id)
+          VALUES (CONCAT('FAC-', vNumero), CURDATE(), vTotal, devisId);
+
+          -- Récupérer l'ID de la facture créée
+          SET vFactureId = LAST_INSERT_ID();
+
+          -- Copier les lignes de devis dans facture_prestation
+          INSERT INTO facture_prestation (facture_id, prestation_id, quantity, soustotal)
+          SELECT vFactureId, prestation_id, quantity, soustotal
+          FROM devis_prestation
+          WHERE devis_id = devisId;
+      END IF;
+  END
+- Pas besoin de renseigner de créateur
+- Type de securité : DEFINER
+- Accés au données SQL : CONTRAINS SQL

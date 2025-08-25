@@ -36,9 +36,6 @@ class Facture
     #[ORM\Column(length: 255)]
     private ?string $numero = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
-    private ?string $montant = null;
-
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTime $dateEmission = null;
 
@@ -90,18 +87,6 @@ class Facture
     public function setNumero(string $numero): static
     {
         $this->numero = $numero;
-
-        return $this;
-    }
-
-    public function getMontant(): ?string
-    {
-        return $this->montant;
-    }
-
-    public function setMontant(string $montant): static
-    {
-        $this->montant = $montant;
 
         return $this;
     }
