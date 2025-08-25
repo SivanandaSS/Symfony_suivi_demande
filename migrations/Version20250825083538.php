@@ -10,22 +10,22 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250821135635 extends AbstractMigration
+final class Version20250825083538 extends AbstractMigration
 {
     public function getDescription(): string
     {
         return '';
     }
 
-    public function down(Schema $schema): void
-    {
-        // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE devis CHANGE date date DATE NOT NULL');
-    }
-
     public function up(Schema $schema): void
     {
+        // this up() migration is auto-generated, please modify it to your needs
+        $this->addSql('ALTER TABLE facture DROP montant');
+    }
+
+    public function down(Schema $schema): void
+    {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE devis CHANGE date date DATE DEFAULT \'CURRENT_TIMESTAMP\' NOT NULL');
+        $this->addSql('ALTER TABLE facture ADD montant NUMERIC(10, 2) NOT NULL');
     }
 }
