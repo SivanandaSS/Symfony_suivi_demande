@@ -18,6 +18,7 @@
         "knplabs/knp-paginator-bundle": "^6.9",
         "nelmio/cors-bundle": "^2.5",
         "nucleos/dompdf-bundle": "^4.3",
+        "paypal/paypal-server-sdk": "1.1.0",
         "phpdocumentor/reflection-docblock": "^5.6.3",
         "phpstan/phpdoc-parser": "^2.2",
         "symfony/asset": "7.3.*",
