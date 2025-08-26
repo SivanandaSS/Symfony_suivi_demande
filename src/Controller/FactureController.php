@@ -6,52 +6,97 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Facture;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 final class FactureController extends AbstractController
 {
     #[Route('/facture', name: 'app_facture')]
-    public function facture(): Response
+    public function facture(
+        EntityManagerInterface $entityManager
+    ): Response
     {
+        $factures = $entityManager->getRepository(Facture::class)->findAll();
+
         return $this->render('facture/index.html.twig', [
-            'controller_name' => 'FactureController',
+            'factures' => $factures,
         ]);
     }
 
-    #[Route('/from-devis/{id}', name: 'facture_from_devis', methods: ['GET', 'POST'])]
-    public function fromDevis(
+    #[Route('/facture/{id}', name: 'facture_show')]
+    public function showFacture(
         int $id,
-        Request $request,
-        EntityManagerInterface $em
-    ): Response {
-        $devis = $em->getRepository(Devis::class)->find($id);
+        EntityManagerInterface $entityManager
+    ): Response
+    {
+        $facture = $entityManager->getRepository(Facture::class)->find($id);
 
-        if (!$devis) {
-            throw $this->createNotFoundException('Devis introuvable');
-        }
-
-    // Création d'une nouvelle facture basée sur le devis
-    $facture = new Facture();
-    $facture->setNumero('FAC-' . uniqid());
-    $facture->setMontant($devis->getTotal());
-    $facture->setDateEmission(new \DateTime())->setTime(0, 0);
-    $facture->setEstPayee(false);
-    $facture->setDevis($devis);
-
-    $form = $this->createForm(FactureType::class, $facture);
-    $form->handleRequest($request);
-
-    if ($form->isSubmitted() && $form->isValid()) {
-        $em->persist($facture);
-        $em->flush();
-
-        $this->addFlash('success', 'Facture créée depuis le devis avec succès.');
-        return $this->redirectToRoute('facture_index');
+        return $this->render('facture/show.html.twig', [
+            'facture' => $facture,
+        ]);
     }
 
-    return $this->render('facture/new.html.twig', [
-        'facture' => $facture,
-        'form' => $form->createView(),
-        'devis' => $devis
-    ]);
+    #[Route('/facture/pdf/{id}', name: 'facture_pdf')]
+    public function exportPdf(
+        int $id,
+        EntityManagerInterface $entityManager
+    ): Response {
+
+        $facture = $entityManager->getRepository(Facture::class)->find($id);
+        
+        if (!$facture) {
+            throw $this->createNotFoundException('Facture non trouvée');
+        }
+        // Désactive la barre de debug si elle est active
+        if ($this->container->has('profiler')) {
+            $this->container->get('profiler')->disable();
+        }
+
+        $htmlTemplate= $this->renderView('facture/pdf.html.twig', [
+            'facture' => $facture,
+        ]);
+
+        //Configuration de domppdf
+        $options = new Options();
+        $options->set('defaultFont', 'Arial');
+        $options->setIsHtml5ParserEnabled(true);
+        $options->set('isRemoteEnabled', true);
+        $options->set('isPhpEnabled', false);
+
+        $dompdf = new Dompdf($options);
+        $dompdf->loadHtml($htmlTemplate);
+        $dompdf->setPaper('A4', 'portrait');
+        try {
+            $dompdf->render();
+        } catch (\Exception $e) {
+            return new Response('<h1>Erreur Dompdf</h1><pre>'.$e->getMessage().'</pre>');
+        }
+
+        // Génération du PDF en mémoire
+        $pdfOutput = $dompdf->output();
+
+        // Étape 1 : enregistrer le PDF sur le serveur
+        $pdfDir = $this->getParameter('kernel.project_dir').'/public/uploads/factures';
+        if (!is_dir($pdfDir)) {
+            mkdir($pdfDir, 0777, true);
+        }
+
+        $pdfFilename = $facture->getNumero().'.pdf';
+        $pdfPath = $pdfDir.'/'.$pdfFilename;
+
+        file_put_contents($pdfPath, $pdfOutput);
+
+        // Étape 2 : enregistrer le chemin dans la base de données
+        $facture->setFacture('/uploads/factures/'.$pdfFilename);
+        $entityManager->persist($facture);
+        $entityManager->flush();
+
+        $response = new Response($pdfOutput);
+        $response->headers->set('Content-Type', 'application/pdf');
+        $response->headers->set('Content-Length', (string) strlen($pdfOutput));
+        $response->headers->set('Content-Disposition', 'attachment; filename="'.$pdfFilename.'"');
+        
+        return $response;
 }
 }

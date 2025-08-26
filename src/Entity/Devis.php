@@ -63,7 +63,7 @@ class Devis
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Groups(['devis:list', 'devis:item'])]
-    private ?\DateTime $date_devis = null;
+    private ?\DateTime $dateDevis = null;
 
     #[ORM\OneToOne(mappedBy: 'devis', cascade: ['persist', 'remove'])]
     private ?Facture $facture = null;
@@ -72,7 +72,7 @@ class Devis
     {
         $this->prestation = new ArrayCollection();
         $this->devisPrestations = new ArrayCollection();
-        $this->date_devis = (new \DateTime())->setTime(0, 0);
+        $this->dateDevis = (new \DateTime())->setTime(0, 0);
     }
 
     public function getId(): ?int
@@ -168,14 +168,14 @@ class Devis
         return $this;
     }
 
-    public function getDate_devis(): ?\DateTime
+    public function getDateDevis(): ?\DateTime
     {
-        return $this->date_devis;
+        return $this->dateDevis;
     }
 
-    public function setDate_devis(\DateTime $date_devis): static
+    public function setDateDevis(\DateTime $dateDevis): static
     {
-        $this->date_devis = $date_devis;
+        $this->dateDevis = $dateDevis;
 
         return $this;
     }
