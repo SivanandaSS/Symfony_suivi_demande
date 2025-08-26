@@ -16,11 +16,24 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
-
+use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
+use Doctrine\ORM\QueryBuilder;
+use App\Repository\DevisRepository;
 
 
 class DevisCrudController extends AbstractCrudController
 {
+    private $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager) {
+        $this->entityManager=$entityManager;
+    }
+
+
+
     public static function getEntityFqcn(): string
     {
         return Devis::class;
@@ -43,8 +56,35 @@ class DevisCrudController extends AbstractCrudController
         ;
     }
 
+    public function createEntity(string $entityFqcn)
+    {
+        $devis = new Devis();
+
+        // Générer l'année courante
+        $year = (new \DateTime())->format('Y');
+
+        // Compter combien de devis existent déjà cette année
+        $count = $this->entityManager->getRepository(Devis::class)
+            ->createQueryBuilder('d')
+            ->select('COUNT(d.id)')
+            ->where('d.numero LIKE :pattern')
+            ->setParameter('pattern', 'DEV' . $year . '%')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        // Incrémentation avec padding 3 chiffres
+        $nextNumber = str_pad($count + 1, 3, '0', STR_PAD_LEFT);
+       
+        // Créer le numéro
+        $devis->setNumero('DEV' . $year . $nextNumber);
+        $devis->setStatut("En attente");
+        return $devis;
+        
+    }
+
     public function configureFields(string $pageName): iterable
     {
+        
         return [
         
             IdField::new('id')->onlyOnIndex(),
@@ -52,14 +92,10 @@ class DevisCrudController extends AbstractCrudController
                 // ->setFormTypeOption('data', new \DateTime())
                 ->setFormTypeOption('disabled', true),
 
-            TextField::new('numero'),
-            ChoiceField::new('statut')
-                ->setLabel("statut")
-                ->setChoices([
-                    'En attente' => 'En attente',
-                    'Accepter' => 'Accepter',
-                    'Refuser' => 'Refuser',
-                ]),
+            TextField::new('numero')
+                ->setFormTypeOption('disabled', true),
+            TextField::new('statut')
+                ->setFormTypeOption('disabled', true),
 
             NumberField::new('total')
                 ->setLabel('Total (€)'),
@@ -72,5 +108,4 @@ class DevisCrudController extends AbstractCrudController
                 ->onlyOnForms()
         ];
     }
-
 }
