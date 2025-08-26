@@ -58,4 +58,20 @@ final class ApiLoginController extends AbstractController
             'message' => 'Logged out successfully'
         ]);
     }
+
+    #[Route(path: '/api/backoffice/{user}', name: 'api_backoffice')]
+    public function backoffice(EntityManagerInterface $entityManager, int $user ): Response
+    {
+        $conn = $entityManager->getConnection();
+
+        $sql = '
+        SELECT  demande.id AS id, `nom`, `prenom`, `description`, demande.devis_id, `user_id`, devis.total, devis.numero, `statut`, `date_devis`,`facture` FROM `demande` LEFT JOIN devis ON (devis.id=demande.devis_id) LEFT JOIN facture ON (facture.devis_id=devis.id) WHERE user_id=:user;
+            ';
+
+        $resultSet = $conn->executeQuery($sql, ['user' => $user]);
+    
+        return $this->json(
+            $resultSet->fetchAll()
+        );
+    }
 }

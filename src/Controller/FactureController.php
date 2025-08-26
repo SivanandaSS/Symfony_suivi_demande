@@ -7,20 +7,32 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Facture;
+use App\Repository\FactureRepository;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use Symfony\Component\HttpFoundation\Request;
 
 final class FactureController extends AbstractController
 {
     #[Route('/facture', name: 'app_facture')]
     public function facture(
-        EntityManagerInterface $entityManager
-    ): Response
-    {
-        $factures = $entityManager->getRepository(Facture::class)->findAll();
+        Request $request,
+        FactureRepository $factureRepository
+    ): Response {
+        $page = $request->query->getInt('page', 1);
+        $limit = 10; // Nombre de factures par page
+
+        // On appelle la méthode de notre repository pour récupérer les factures de la page actuelle
+        $factures = $factureRepository->findWithPagination($page, $limit);
+
+        // On appelle la méthode de notre repository pour compter toutes les factures
+        $totalFactures = $factureRepository->countAll();
+        $totalPages = ceil($totalFactures / $limit);
 
         return $this->render('facture/index.html.twig', [
             'factures' => $factures,
+            'page' => $page,
+            'totalPages' => $totalPages,
         ]);
     }
 
@@ -28,8 +40,7 @@ final class FactureController extends AbstractController
     public function showFacture(
         int $id,
         EntityManagerInterface $entityManager
-    ): Response
-    {
+    ): Response {
         $facture = $entityManager->getRepository(Facture::class)->find($id);
 
         return $this->render('facture/show.html.twig', [
@@ -53,7 +64,7 @@ final class FactureController extends AbstractController
             $this->container->get('profiler')->disable();
         }
 
-        $htmlTemplate= $this->renderView('facture/pdf.html.twig', [
+        $htmlTemplate = $this->renderView('facture/pdf.html.twig', [
             'facture' => $facture,
         ]);
 
@@ -92,11 +103,15 @@ final class FactureController extends AbstractController
         $entityManager->persist($facture);
         $entityManager->flush();
 
+        while (ob_get_level()) {
+            ob_end_clean();
+        }
+
         $response = new Response($pdfOutput);
         $response->headers->set('Content-Type', 'application/pdf');
         $response->headers->set('Content-Length', (string) strlen($pdfOutput));
-        $response->headers->set('Content-Disposition', 'attachment; filename="'.$pdfFilename.'"');
+        $response->headers->set('Content-Disposition', 'attachement; filename="'.$pdfFilename.'"');
         
         return $response;
-}
+    }
 }

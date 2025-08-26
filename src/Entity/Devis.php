@@ -33,7 +33,7 @@ class Devis
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['devis:list', 'devis:item'])]
+    #[Groups(['devis:list', 'devis:item', 'facture:list', 'facture:item'])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
@@ -201,5 +201,6 @@ class Devis
 
         return $this;
     }
+
 
 }

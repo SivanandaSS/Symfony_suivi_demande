@@ -16,28 +16,31 @@ class FactureRepository extends ServiceEntityRepository
         parent::__construct($registry, Facture::class);
     }
 
-//    /**
-//     * @return Facture[] Returns an array of Facture objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('f')
-//            ->andWhere('f.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('f.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * Récupère une liste de factures pour une page donnée avec une limite définie.
+     * * @param int $page Le numéro de la page.
+     * @param int $limit Le nombre de résultats par page.
+     * @return Facture[] Returns an array of Facture objects
+     */
+    public function findWithPagination(int $page, int $limit): array
+    {
+        return $this->createQueryBuilder('f')
+            ->orderBy('f.dateEmission', 'DESC')
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 
-//    public function findOneBySomeField($value): ?Facture
-//    {
-//        return $this->createQueryBuilder('f')
-//            ->andWhere('f.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    /**
+     * Compte le nombre total de factures.
+     * * @return int Returns the total number of Facture objects
+     */
+    public function countAll(): int
+    {
+        return $this->createQueryBuilder('f')
+            ->select('count(f.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }
