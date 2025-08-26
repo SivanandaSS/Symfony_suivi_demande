@@ -9,6 +9,8 @@
     <div class="card shadow p-4 mb-4">
         <h4 class="mb-3">Informations Facture</h4>
         <p><strong>Date :</strong> {{ facture.dateEmission|date('d/m/Y') }}</p>
+        <!-- Ajout du nom et prénom du client via les relations -->
+        <p><strong>Client :</strong> {{ facture.devis.demande.prenom }} {{ facture.devis.demande.nom }}</p>
         <p><strong>Total :</strong> {{ facture.total|number_format(2, ',', ' ') }} €</p>
         {% if facture.devis %}
             <p><strong>Devis associé :</strong> {{ facture.devis.numero }}</p>
