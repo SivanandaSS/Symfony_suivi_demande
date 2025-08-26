@@ -36,10 +36,17 @@ class Prestation
     #[ORM\OneToMany(targetEntity: DevisPrestation::class, mappedBy: 'prestation')]
     private Collection $devisPrestations;
 
+    /**
+     * @var Collection<int, FacturePrestation>
+     */
+    #[ORM\OneToMany(targetEntity: FacturePrestation::class, mappedBy: 'prestation')]
+    private Collection $facturePrestations;
+
     public function __construct()
     {
         $this->devis = new ArrayCollection();
         $this->devisPrestations = new ArrayCollection();
+        $this->facturePrestations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -100,6 +107,36 @@ class Prestation
             // set the owning side to null (unless already changed)
             if ($devisPrestation->getPrestation() === $this) {
                 $devisPrestation->setPrestation(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FacturePrestation>
+     */
+    public function getFacturePrestations(): Collection
+    {
+        return $this->facturePrestations;
+    }
+
+    public function addFacturePrestation(FacturePrestation $facturePrestation): static
+    {
+        if (!$this->facturePrestations->contains($facturePrestation)) {
+            $this->facturePrestations->add($facturePrestation);
+            $facturePrestation->setPrestation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFacturePrestation(FacturePrestation $facturePrestation): static
+    {
+        if ($this->facturePrestations->removeElement($facturePrestation)) {
+            // set the owning side to null (unless already changed)
+            if ($facturePrestation->getPrestation() === $this) {
+                $facturePrestation->setPrestation(null);
             }
         }
 

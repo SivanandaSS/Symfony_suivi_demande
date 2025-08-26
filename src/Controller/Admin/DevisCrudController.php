@@ -48,7 +48,7 @@ class DevisCrudController extends AbstractCrudController
         return [
         
             IdField::new('id')->onlyOnIndex(),
-            DateField::new('date')
+            DateField::new('date_devis')
                 // ->setFormTypeOption('data', new \DateTime())
                 ->setFormTypeOption('disabled', true),
 
@@ -72,22 +72,5 @@ class DevisCrudController extends AbstractCrudController
                 ->onlyOnForms()
         ];
     }
-
-    // public function updateEntity(EntityManagerInterface $em, $entityInstance): void
-    // {
-    //     if ($entityInstance instanceof Devis) {
-    //         $this->recalculateTotal($entityInstance);
-    //     }
-    //     parent::updateEntity($em, $entityInstance);
-    // }
-
-    // private function recalculateTotal(Devis $devis): void
-    // {
-    //     $total = 0;
-    //     foreach ($devis->getDevisPrestations() as $ligne) {
-    //         $total += (float) $ligne->getSoustotal();
-    //     }
-    //     $devis->setTotal($total);
-    // }
 
 }
