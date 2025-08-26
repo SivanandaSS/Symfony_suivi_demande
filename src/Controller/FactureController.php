@@ -99,7 +99,7 @@ final class FactureController extends AbstractController
         $response = new Response($pdfOutput);
         $response->headers->set('Content-Type', 'application/pdf');
         $response->headers->set('Content-Length', (string) strlen($pdfOutput));
-        $response->headers->set('Content-Disposition', 'attachement; filename="'.$pdfFilename.'"');
+        $response->headers->set('Content-Disposition', 'inline; filename="'.$pdfFilename.'"');
         
         return $response;
 }
