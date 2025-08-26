@@ -50,7 +50,7 @@ class Facture
      * @var Collection<int, FacturePrestation>
      */
     #[ORM\OneToMany(targetEntity: FacturePrestation::class, mappedBy: 'facture', orphanRemoval: true)]
-    private Collection $facture_prestation;
+    private Collection $facturePrestations;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $total = null;
@@ -128,29 +128,29 @@ class Facture
     }
 
     /**
-     * @return Collection<int, FacturePrestation>
+     * @return Collection<int, FacturePrestations>
      */
-    public function getFacturePrestation(): Collection
+    public function getFacturePrestations(): Collection
     {
-        return $this->facture_prestation;
+        return $this->facturePrestations;
     }
 
-    public function addFacturePrestation(FacturePrestation $facturePrestation): static
+    public function addFacturePrestations(FacturePrestations $facturePrestations): static
     {
-        if (!$this->facture_prestation->contains($facturePrestation)) {
-            $this->facture_prestation->add($facturePrestation);
-            $facturePrestation->setFacture($this);
+        if (!$this->facturePrestations->contains($facturePrestations)) {
+            $this->facturePrestations->add($facturePrestations);
+            $facturePrestations->setFacture($this);
         }
 
         return $this;
     }
 
-    public function removeFacturePrestation(FacturePrestation $facturePrestation): static
+    public function removeFacturePrestations(FacturePrestations $facturePrestations): static
     {
-        if ($this->facture_prestation->removeElement($facturePrestation)) {
+        if ($this->facturePrestations->removeElement($facturePrestations)) {
             // set the owning side to null (unless already changed)
-            if ($facturePrestation->getFacture() === $this) {
-                $facturePrestation->setFacture(null);
+            if ($facturePrestations->getFacture() === $this) {
+                $facturePrestations->setFacture(null);
             }
         }
 
