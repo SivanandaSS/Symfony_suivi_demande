@@ -57,6 +57,8 @@ final class FactureController extends AbstractController
             'facture' => $facture,
         ]);
 
+
+
         //Configuration de domppdf
         $options = new Options();
         $options->set('defaultFont', 'Arial');
@@ -82,7 +84,7 @@ final class FactureController extends AbstractController
         $response = new Response($pdfOutput);
         $response->headers->set('Content-Type', 'application/pdf');
         $response->headers->set('Content-Length', (string) strlen($pdfOutput));
-        $response->headers->set('Content-Disposition', 'attachment; filename="facture_'.$facture->getNumero().'.pdf"');
+        $response->headers->set('Content-Disposition', 'inline; filename="facture_'.$facture->getNumero().'.pdf"');
         
         return $response;
 }
