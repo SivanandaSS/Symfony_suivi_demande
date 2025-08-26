@@ -57,8 +57,6 @@ final class FactureController extends AbstractController
             'facture' => $facture,
         ]);
 
-
-
         //Configuration de domppdf
         $options = new Options();
         $options->set('defaultFont', 'Arial');
@@ -78,13 +76,26 @@ final class FactureController extends AbstractController
         // Génération du PDF en mémoire
         $pdfOutput = $dompdf->output();
 
-        while (ob_get_level()) {
-            ob_end_clean();
+        // Étape 1 : enregistrer le PDF sur le serveur
+        $pdfDir = $this->getParameter('kernel.project_dir').'/public/uploads/factures';
+        if (!is_dir($pdfDir)) {
+            mkdir($pdfDir, 0777, true);
         }
+
+        $pdfFilename = $facture->getNumero().'.pdf';
+        $pdfPath = $pdfDir.'/'.$pdfFilename;
+
+        file_put_contents($pdfPath, $pdfOutput);
+
+        // Étape 2 : enregistrer le chemin dans la base de données
+        $facture->setFacture('/uploads/factures/'.$pdfFilename);
+        $entityManager->persist($facture);
+        $entityManager->flush();
+
         $response = new Response($pdfOutput);
         $response->headers->set('Content-Type', 'application/pdf');
         $response->headers->set('Content-Length', (string) strlen($pdfOutput));
-        $response->headers->set('Content-Disposition', 'inline; filename="facture_'.$facture->getNumero().'.pdf"');
+        $response->headers->set('Content-Disposition', 'attachment; filename="'.$pdfFilename.'"');
         
         return $response;
 }
