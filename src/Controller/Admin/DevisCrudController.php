@@ -48,7 +48,7 @@ class DevisCrudController extends AbstractCrudController
         return [
         
             IdField::new('id')->onlyOnIndex(),
-            DateField::new('date_devis')
+            DateField::new('dateDevis')
                 // ->setFormTypeOption('data', new \DateTime())
                 ->setFormTypeOption('disabled', true),
 
@@ -65,7 +65,7 @@ class DevisCrudController extends AbstractCrudController
                 ->setLabel('Total (€)'),
 
             AssociationField::new('demande')->setCrudController(DemandeCrudController::class),
-            // AssociationField::new('facture')->setCrudController(FactureCrudController::class),
+
             CollectionField::new('devisPrestations')
                 ->useEntryCrudForm(DevisPrestationCrudController::class)
                 ->setLabel('Prestations du devis')
