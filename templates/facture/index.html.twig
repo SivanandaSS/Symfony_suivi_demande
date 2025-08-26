@@ -47,5 +47,31 @@
         {% endfor %}
         </tbody>
     </table>
+
+    {# Ajout de la pagination manuelle #}
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            {# Lien Précédent #}
+            <li class="page-item {% if page <= 1 %}disabled{% endif %}">
+                <a class="page-link" href="{{ path('app_facture', {'page': page - 1}) }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            {# Boucle pour les numéros de page #}
+            {% for i in 1..totalPages %}
+                <li class="page-item {% if i == page %}active{% endif %}">
+                    <a class="page-link" href="{{ path('app_facture', {'page': i}) }}">{{ i }}</a>
+                </li>
+            {% endfor %}
+
+            {# Lien Suivant #}
+            <li class="page-item {% if page >= totalPages %}disabled{% endif %}">
+                <a class="page-link" href="{{ path('app_facture', {'page': page + 1}) }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </div>
 {% endblock %}
