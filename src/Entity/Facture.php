@@ -34,9 +34,11 @@ class Facture
     private ?string $facture = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['facture:list', 'facture:item'])]
     private ?string $numero = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['facture:list', 'facture:item'])]
     private ?\DateTime $dateEmission = null;
 
     #[ORM\Column]
@@ -44,6 +46,7 @@ class Facture
 
     #[ORM\OneToOne(inversedBy: 'facture', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['facture:list', 'facture:item'])]
     private ?Devis $devis = null;
 
     /**
