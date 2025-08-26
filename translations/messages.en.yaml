@@ -5,6 +5,15 @@ demande:
     Les devis: Quotations
     Les factures: Bills
     Les prestations: The services
+    Les devis_prestation: Service quote
+    Nom: Last name
+    Prenom: First name
+    Categorie: Category
+    Filtres: Filtres
+    Créer La demande: Create a request
+    Créer "La demande": Create a request
+    Créer et ajouter un nouvel élément: Create and add an element
+    Créer: Create
     Tableau de bord: Dashboard
     You are logged in as: You are logged in as 
     Logout: Logout
