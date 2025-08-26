@@ -92,10 +92,14 @@ final class FactureController extends AbstractController
         $entityManager->persist($facture);
         $entityManager->flush();
 
+        while (ob_get_level()) {
+            ob_end_clean();
+        }
+
         $response = new Response($pdfOutput);
         $response->headers->set('Content-Type', 'application/pdf');
         $response->headers->set('Content-Length', (string) strlen($pdfOutput));
-        $response->headers->set('Content-Disposition', 'attachment; filename="'.$pdfFilename.'"');
+        $response->headers->set('Content-Disposition', 'attachement; filename="'.$pdfFilename.'"');
         
         return $response;
 }
