@@ -2,28 +2,22 @@ demande:
     Les demandes: Requests
     La demande: Request
     Les catégories: Categories
+    Categorie: Category
     Les devis: Quotations
     Les factures: Bills
     Les prestations: The services
     Les devis_prestation: Service quote
     Nom: Last name
     Prenom: First name
-    Categorie: Category
     Filtres: Filtres
     Créer La demande: Create a request
     Créer "La demande": Create a request
     Créer et ajouter un nouvel élément: Create and add an element
     Créer: Create
     Tableau de bord: Dashboard
-    You are logged in as: You are logged in as 
-    Logout: Logout
-    Please sign in: Please sign in
+    Vous êtes connecter comme: You are logged in as 
+    Deconnexion: Logout
+    Se connecter: Please sign in
     Email: Email
-    Password: Password
-    Sign in: Sign in
-    Requests: Requests 
-    Request: Request
-    Categories: Categories 
-    Quotations: Quotations 
-    Bills: Bills
-    The services: The services 
+    Mots de passe: Password
+    
