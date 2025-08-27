@@ -9,6 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\GetCollection;
 use Symfony\Component\Serializer\Attribute\Groups;
 
@@ -16,7 +17,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ApiResource(
     operations: [
         new Get(normalizationContext: ['groups' => 'facture:item']),
-        new GetCollection(normalizationContext: ['groups' => 'facture:list'])
+        new GetCollection(normalizationContext: ['groups' => 'facture:list']),
+        new Patch(inputFormats: ['json' => ['application/merge-patch+json']])
     ],
     order: ['id' => 'DESC'],
     paginationEnabled: false,
@@ -42,6 +44,7 @@ class Facture
     private ?\DateTime $dateEmission = null;
 
     #[ORM\Column]
+    #[Groups(['facture:list', 'facture:item'])]
     private ?bool $paiement = null;
 
     #[ORM\OneToOne(inversedBy: 'facture', cascade: ['persist', 'remove'])]
