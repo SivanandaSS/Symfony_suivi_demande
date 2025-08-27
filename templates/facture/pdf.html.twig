@@ -1,10 +1,10 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Facture {{ facture.numero }}</title>
+{% extends 'base.html.twig' %}
+
+{% block title %}Facture {{ facture.numero }}{% endblock %}
+
+{% block stylesheets %}
     <style>
+        /* Styles de base non affectés par .invoice-container */
         body {
             font-family: 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
             font-size: 14px;
@@ -13,6 +13,8 @@
             margin: 0;
             padding: 20px;
         }
+
+        /* Le conteneur de la facture lui-même */
         .invoice-container {
             max-width: 800px;
             margin: 20px auto;
@@ -21,91 +23,111 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
             background-color: #fff;
         }
-        .header {
+
+        /* Règles CSS ciblées avec .invoice-container pour une plus haute spécificité */
+        .invoice-container .header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
             margin-bottom: 40px;
         }
-        .header .company-info {
+
+        .invoice-container .header .company-info {
             line-height: 1.4;
         }
-        .header .company-info h1 {
+
+        .invoice-container .header .company-info h1 {
             font-size: 24px;
             margin: 0 0 5px 0;
             color: #007bff;
         }
-        .header .invoice-details {
+
+        .invoice-container .header .invoice-details {
             text-align: right;
             line-height: 1.4;
         }
-        .header .invoice-details h2 {
+
+        .invoice-container .header .invoice-details h2 {
             font-size: 20px;
             margin: 0 0 5px 0;
             color: #555;
         }
-        .header .invoice-details p {
+
+        .invoice-container .header .invoice-details p {
             margin: 0;
         }
-        .customer-info {
+
+        .invoice-container .customer-info {
             margin-bottom: 30px;
         }
-        .customer-info p {
+
+        .invoice-container .customer-info p {
             margin: 0;
         }
-        .section-title {
+
+        .invoice-container .section-title {
             font-size: 18px;
             font-weight: bold;
             margin-bottom: 15px;
             border-bottom: 2px solid #007bff;
             padding-bottom: 5px;
         }
-        table {
+
+        .invoice-container table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
-        table th, table td {
+
+        .invoice-container table th, .invoice-container table td {
             border: 1px solid #ddd;
             padding: 12px;
             text-align: left;
         }
-        table thead th {
+
+        .invoice-container table thead th {
             background-color: #f8f9fa;
             color: #495057;
             font-weight: bold;
             text-transform: uppercase;
         }
-        table tbody tr:nth-child(even) {
+
+        .invoice-container table tbody tr:nth-child(even) {
             background-color: #f2f2f2;
         }
-        .totals-table {
+
+        .invoice-container .totals-table {
             width: 50%;
             margin-left: auto;
             margin-top: 20px;
         }
-        .totals-table th, .totals-table td {
+
+        .invoice-container .totals-table th, .invoice-container .totals-table td {
             border: none;
             padding: 8px 12px;
             text-align: right;
         }
-        .totals-table tr.total-row th, .totals-table tr.total-row td {
+
+        .invoice-container .totals-table tr.total-row th, .invoice-container .totals-table tr.total-row td {
             background-color: #007bff;
             color: #fff;
             font-size: 16px;
             font-weight: bold;
         }
-        .footer {
+
+        .invoice-container .footer {
             margin-top: 50px;
             text-align: center;
             font-size: 12px;
             color: #777;
         }
     </style>
-</head>
-<body>
+{% endblock %}
+
+{% block body %}
     <div class="invoice-container">
         <div class="header">
+        <img="{{ asset('public/img/ordi.webp') }}" alt="Logo de l'entreprise" style="height: 80px;">
             <div class="company-info">
                 <h1>Pdev</h1>
                 <p>Adresse de l'Entreprise<br>
@@ -165,5 +187,4 @@
             <p>SIRET: 123 456 789 00012 - RCS Ville - TVA Intracommunautaire: FR00 123456789</p>
         </div>
     </div>
-</body>
-</html>
+{% endblock %}

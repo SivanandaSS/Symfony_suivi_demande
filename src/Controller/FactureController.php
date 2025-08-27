@@ -67,16 +67,17 @@ final class FactureController extends AbstractController
         $htmlTemplate = $this->renderView('facture/pdf.html.twig', [
             'facture' => $facture,
         ]);
-
+        $htmlTemplate=str_replace("€","&euro;",$htmlTemplate);
+        $htmlTemplate=str_replace("É","&Eacute;",$htmlTemplate);
+        $htmlTemplate=str_replace("é","&eacute;",$htmlTemplate);
         //Configuration de domppdf
         $options = new Options();
         $options->set('defaultFont', 'Arial');
-        $options->setIsHtml5ParserEnabled(true);
         $options->set('isRemoteEnabled', true);
         $options->set('isPhpEnabled', false);
 
         $dompdf = new Dompdf($options);
-        $dompdf->loadHtml($htmlTemplate);
+        $dompdf->loadHtml(mb_convert_encoding($htmlTemplate,"ISO-8859-1"));
         $dompdf->setPaper('A4', 'portrait');
         try {
             $dompdf->render();
@@ -86,7 +87,6 @@ final class FactureController extends AbstractController
 
         // Génération du PDF en mémoire
         $pdfOutput = $dompdf->output();
-
         // Étape 1 : enregistrer le PDF sur le serveur
         $pdfDir = $this->getParameter('kernel.project_dir').'/public/uploads/factures';
         if (!is_dir($pdfDir)) {
@@ -95,7 +95,6 @@ final class FactureController extends AbstractController
 
         $pdfFilename = $facture->getNumero().'.pdf';
         $pdfPath = $pdfDir.'/'.$pdfFilename;
-
         file_put_contents($pdfPath, $pdfOutput);
 
         // Étape 2 : enregistrer le chemin dans la base de données
