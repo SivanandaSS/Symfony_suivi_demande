@@ -102,8 +102,8 @@ class DevisCrudController extends AbstractCrudController
 
             AssociationField::new('demande')->setCrudController(DemandeCrudController::class)
                 ->setFormTypeOptions([
-        'choice_label' => function ($demande) {
-            return $demande->getNom() . '  ' .$demande->getPrenom(). ' - ' .$demande->getDescription();
+                    'choice_label' => function ($demande) {
+                        return $demande->getNom() . '  ' .$demande->getPrenom(). ' - ' .$demande->getDescription();
         },
     ]),     
 
