@@ -68,15 +68,15 @@ class DevisCrudController extends AbstractCrudController
             ->createQueryBuilder('d')
             ->select('COUNT(d.id)')
             ->where('d.numero LIKE :pattern')
-            ->setParameter('pattern', 'DEV' . $year . '%')
+            ->setParameter('pattern', $year . '%')
             ->getQuery()
             ->getSingleScalarResult();
 
         // Incrémentation avec padding 3 chiffres
         $nextNumber = str_pad($count + 1, 3, '0', STR_PAD_LEFT);
-       
+
         // Créer le numéro
-        $devis->setNumero('DEV' . $year . $nextNumber);
+        $devis->setNumero($year . $nextNumber);
         $devis->setStatut("En attente");
         return $devis;
         
