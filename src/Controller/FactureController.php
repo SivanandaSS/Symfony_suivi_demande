@@ -51,7 +51,8 @@ final class FactureController extends AbstractController
     #[Route('/facture/pdf/{id}', name: 'facture_pdf')]
     public function exportPdf(
         int $id,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        Request $request
     ): Response {
 
         $facture = $entityManager->getRepository(Facture::class)->find($id);
@@ -64,8 +65,11 @@ final class FactureController extends AbstractController
             $this->container->get('profiler')->disable();
         }
 
+        $logoPath = $request->getSchemeAndHttpHost() . '/images/ordi.PNG';
+
         $htmlTemplate = $this->renderView('facture/pdf.html.twig', [
             'facture' => $facture,
+            'logo_url' => $logoPath,
         ]);
 
         //Configuration de domppdf
@@ -110,7 +114,7 @@ final class FactureController extends AbstractController
         $response = new Response($pdfOutput);
         $response->headers->set('Content-Type', 'application/pdf');
         $response->headers->set('Content-Length', (string) strlen($pdfOutput));
-        $response->headers->set('Content-Disposition', 'attachment; filename="'.$pdfFilename.'"');
+        $response->headers->set('Content-Disposition', 'inline; filename="'.$pdfFilename.'"');
         
         return $response;
     }
