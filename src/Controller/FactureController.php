@@ -61,15 +61,29 @@ final class FactureController extends AbstractController
    
     #[Route('/facture/pdf/{id}', name: 'facture_pdf')]
     public function exportPdf(
-        Devis $devis,
+        int $id,
         EntityManagerInterface $entityManager,
-        Environment $twig,
-        int $id
-    ): Facture {
+        Request $request
+    ): Response {
 
-        $facture = $entityManager-> getRepository(Facture::class)->find($id);
+        $facture = $entityManager->getRepository(Facture::class)->find($id);
+        
+        if (!$facture) {
+            throw $this->createNotFoundException('Facture non trouvée');
+        }
+        // Désactive la barre de debug si elle est active
+        if ($this->container->has('profiler')) {
+            $this->container->get('profiler')->disable();
+        }
 
-        // Générer le PDF
+        $logoPath = $request->getSchemeAndHttpHost() . '/images/ordi.PNG';
+
+        $htmlTemplate = $this->renderView('facture/pdf.html.twig', [
+            'facture' => $facture,
+            'logo_url' => $logoPath,
+        ]);
+
+        //Configuration de domppdf
         $options = new Options();
         $options->set('defaultFont', 'Arial');
         $options->set('isHtml5ParserEnabled', true);
@@ -106,9 +120,15 @@ final class FactureController extends AbstractController
         $entityManager->persist($facture);
         $entityManager->flush();
 
-        return $facture;
+        while (ob_get_level()) {
+            ob_end_clean();
+        }
 
-
- }
-
+        $response = new Response($pdfOutput);
+        $response->headers->set('Content-Type', 'application/pdf');
+        $response->headers->set('Content-Length', (string) strlen($pdfOutput));
+        $response->headers->set('Content-Disposition', 'attachment; filename="'.$pdfFilename.'"');
+        
+        return $response;
+    }
 }

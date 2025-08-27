@@ -76,7 +76,7 @@ final class ApiLoginController extends AbstractController
         $conn = $entityManager->getConnection();
 
         $sql = '
-        SELECT  demande.id AS id, `nom`, `prenom`, `description`, demande.devis_id, `user_id`, devis.total, devis.numero, `statut`, `date_devis`,`facture` FROM `demande` LEFT JOIN devis ON (devis.id=demande.devis_id) LEFT JOIN facture ON (facture.devis_id=devis.id) WHERE user_id=:user;
+        SELECT  demande.id AS id, `nom`, `prenom`, `description`, demande.devis_id, `user_id`, devis.total, devis.numero, `statut`, `date_devis`, facture.id AS factureId, `facture`, facture.paiement AS paiement FROM `demande` LEFT JOIN devis ON (devis.id=demande.devis_id) LEFT JOIN facture ON (facture.devis_id=devis.id) WHERE user_id=:user;
             ';
 
         $resultSet = $conn->executeQuery($sql, ['user' => $user]);

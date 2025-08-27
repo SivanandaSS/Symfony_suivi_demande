@@ -22,6 +22,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use Doctrine\ORM\QueryBuilder;
 use App\Repository\DevisRepository;
+use App\Entity\Demande;
 
 
 class DevisCrudController extends AbstractCrudController
@@ -68,15 +69,15 @@ class DevisCrudController extends AbstractCrudController
             ->createQueryBuilder('d')
             ->select('COUNT(d.id)')
             ->where('d.numero LIKE :pattern')
-            ->setParameter('pattern', 'DEV' . $year . '%')
+            ->setParameter('pattern', $year . '%')
             ->getQuery()
             ->getSingleScalarResult();
 
         // Incrémentation avec padding 3 chiffres
         $nextNumber = str_pad($count + 1, 3, '0', STR_PAD_LEFT);
-       
+
         // Créer le numéro
-        $devis->setNumero('DEV' . $year . $nextNumber);
+        $devis->setNumero($year . $nextNumber);
         $devis->setStatut("En attente");
         return $devis;
         
@@ -84,7 +85,6 @@ class DevisCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        
         return [
         
             IdField::new('id')->onlyOnIndex(),
@@ -100,7 +100,12 @@ class DevisCrudController extends AbstractCrudController
             NumberField::new('total')
                 ->setLabel('Total (€)'),
 
-            AssociationField::new('demande')->setCrudController(DemandeCrudController::class),
+            AssociationField::new('demande')->setCrudController(DemandeCrudController::class)
+                ->setFormTypeOptions([
+                    'choice_label' => function ($demande) {
+                        return $demande->getNom() . '  ' .$demande->getPrenom(). ' - ' .$demande->getDescription();
+        },
+    ]),     
 
             CollectionField::new('devisPrestations')
                 ->useEntryCrudForm(DevisPrestationCrudController::class)

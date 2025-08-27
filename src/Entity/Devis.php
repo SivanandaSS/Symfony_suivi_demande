@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\DevisRepository;
+use App\Controller\DevisAcceptController;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -20,7 +21,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(normalizationContext: ['groups' => 'devis:item']),
         new GetCollection(normalizationContext: ['groups' => 'devis:list']),
-        new Patch(inputFormats: ['json' => ['application/merge-patch+json']])
+        new Patch(
+            uriTemplate: '/devis/{id}/accepter',
+            controller: DevisAcceptController::class,
+        ),
     ],
     order: ['numero' => 'DESC'],
     paginationEnabled: false,
