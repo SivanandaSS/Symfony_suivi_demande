@@ -2,14 +2,25 @@
 
 namespace App\Controller;
 
+use ApiPlatform\Metadata\Post;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\User;
+use App\Entity\Devis;
+use App\Entity\Demande;
+use App\Entity\Facture;
+use Twig\Environment;
+use App\Controller\FactureController;
+use App\Repository\FactureRepository;
+
+use App\Repository\DevisRepository;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Uid\Uuid;
-
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 final class ApiLoginController extends AbstractController
 {
@@ -71,7 +82,35 @@ final class ApiLoginController extends AbstractController
         $resultSet = $conn->executeQuery($sql, ['user' => $user]);
     
         return $this->json(
-            $resultSet->fetchAll()
+            $resultSet->fetchAllAssociative()
         );
     }
-}
+
+    #[Route(path: '/api/devis/{id}/accept', name: 'api_devis_accept', methods: ['POST'])]
+    public function acceptDevis(
+        EntityManagerInterface $entityManager, 
+        DevisRepository $devisRepository, 
+        FactureRepository $factureRepository,
+        Environment $twig,
+        int $id ): Response
+    {
+        $devis = $devisRepository->find($id);
+        
+        // MAJ le statut du devis
+        $devis->setStatut('Accepté');
+        
+        $entityManager->persist($devis);
+        $entityManager->flush();
+
+        // Genere la facture save en utilisant la méthode réutilisable
+        $facture = $factureRepository->findOneBy(['devis' => $devis -> getId()]);
+
+        $factureId = $facture ? $facture -> getId() : null;
+
+        return new JsonResponse([
+            'factureId' => $factureId,
+            'devisId' => $devis ->getId(),
+        ]);
+    }
+ 
+ } 
