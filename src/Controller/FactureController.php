@@ -7,14 +7,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Facture;
-use App\Entity\Devis;
 use App\Repository\FactureRepository;
-use App\Repository\DevisRepository;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Symfony\Component\HttpFoundation\Request;
-use Twig\Environment;
-
 
 final class FactureController extends AbstractController
 {
@@ -42,23 +38,16 @@ final class FactureController extends AbstractController
 
     #[Route('/facture/{id}', name: 'facture_show')]
     public function showFacture(
-        Request $request,
-        Facture $facture,
-       
-        DevisRepository $devisRepository,
-       
-    ): Response
-    {
-        $devisId = $facture->getDevis()->getId();
-        $devis = $devisRepository->find($devisId);
-       
+        int $id,
+        EntityManagerInterface $entityManager
+    ): Response {
+        $facture = $entityManager->getRepository(Facture::class)->find($id);
 
         return $this->render('facture/show.html.twig', [
             'facture' => $facture,
-            'devis' => $devis,
         ]);
     }
-   
+
     #[Route('/facture/pdf/{id}', name: 'facture_pdf')]
     public function exportPdf(
         int $id,
@@ -86,36 +75,34 @@ final class FactureController extends AbstractController
         //Configuration de domppdf
         $options = new Options();
         $options->set('defaultFont', 'Arial');
-        $options->set('isHtml5ParserEnabled', true);
+        $options->setIsHtml5ParserEnabled(true);
         $options->set('isRemoteEnabled', true);
         $options->set('isPhpEnabled', false);
+
         $dompdf = new Dompdf($options);
-
-        $html = $twig->render('facture/pdf_template.html.twig', [
-            'facture' => $facture,
-            'devis' => $devis,
-        ]);
-
-        $dompdf->loadHtml($html);
+        $dompdf->loadHtml($htmlTemplate);
         $dompdf->setPaper('A4', 'portrait');
-        $dompdf->render();
-
-        // Désactive la barre de debug si elle est active
-        if ($this->container->has('profiler')) {
-            $this->container->get('profiler')->disable();
+        try {
+            $dompdf->render();
+        } catch (\Exception $e) {
+            return new Response('<h1>Erreur Dompdf</h1><pre>'.$e->getMessage().'</pre>');
         }
 
-        // Sauvegarde le fichier sur le serveur
-        $pdfDir = $this->getParameter('kernel.project_dir') . '/public/uploads/factures';
+        // Génération du PDF en mémoire
+        $pdfOutput = $dompdf->output();
+
+        // Étape 1 : enregistrer le PDF sur le serveur
+        $pdfDir = $this->getParameter('kernel.project_dir').'/public/uploads/factures';
         if (!is_dir($pdfDir)) {
             mkdir($pdfDir, 0777, true);
         }
-        $pdfFilename = $facture->getNumero() . '.pdf';
-        $pdfPath = $pdfDir . '/' . $pdfFilename;
-        file_put_contents($pdfPath, $dompdf->output());
 
+        $pdfFilename = $facture->getNumero().'.pdf';
+        $pdfPath = $pdfDir.'/'.$pdfFilename;
 
-        // enregistrer le chemin dans la base de données
+        file_put_contents($pdfPath, $pdfOutput);
+
+        // Étape 2 : enregistrer le chemin dans la base de données
         $facture->setFacture('/uploads/factures/'.$pdfFilename);
         $entityManager->persist($facture);
         $entityManager->flush();
