@@ -40,7 +40,7 @@ final class RegisterController extends AbstractController
         $entityManager->flush();
 
         return new JsonResponse([
-            'message' => 'User registered successfully',
+            'message' => 'demande.User registered successfully',
             'token'   => $token,
             'user'    => [
                 'id'     => $user->getId(),

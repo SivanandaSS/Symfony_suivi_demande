@@ -30,8 +30,8 @@ class DevisPrestationCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setEntityLabelInSingular('Le devis avec prestatios')
-            ->setEntityLabelInPlural('Les devis avec prestations')
+            ->setEntityLabelInSingular('demande.Le devis avec prestation')
+            ->setEntityLabelInPlural('demande.Les devis avec prestations')
             // ->setSearchFields(['nom', 'numero'])
             ->setDefaultSort(['id' => 'ASC'])
         ;
@@ -41,6 +41,7 @@ class DevisPrestationCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         $prestationField = AssociationField::new('prestation')
+            ->setLabel('demande.Prestation')
             ->setRequired(true)
             ->formatValue(function($value, $entity) {
                 return $entity ? $entity->getNom() : '';
@@ -50,15 +51,15 @@ class DevisPrestationCrudController extends AbstractCrudController
             });
 
         $puField = NumberField::new('pu')
-            ->setLabel('Prix Unitaire (€)')
+            ->setLabel('demande.Prix Unitaire (€)')
             
             ->setFormTypeOption('disabled', true); // lecture seule
 
         $quantityField = NumberField::new('quantity')
-            ->setLabel('Quantité');
+            ->setLabel('demande.Quantité');
 
         $soustotalField = NumberField::new('soustotal')
-            ->setLabel('Sous-total (€)')
+            ->setLabel('demande.Sous-total (€)')
             ->setFormTypeOption('disabled', true); // lecture seule
 
         return [

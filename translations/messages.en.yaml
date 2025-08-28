@@ -3,11 +3,13 @@ demande:
     La demande: Request
     Les catégories: Categories
     Les devis: Quotations
+    Le devis: Quotation
     Les factures: Bills
     Les prestations: The services
     Les devis_prestation: Service quote
     Nom: Last name
     Prenom: First name
+    Prénom: First name
     Categorie: Category
     Filtres: Filtres
     Créer La demande: Create a request
@@ -27,3 +29,15 @@ demande:
     Quotations: Quotations 
     Bills: Bills
     The services: The services 
+    Description: Description
+    En attente:
+    Prestations du devis: Service quote
+    Les prestations des devis:
+    Catégorie: Category
+    Numéro: Number
+    Le devis avec prestation:
+    Les devis avec prestations:
+    Prestation: 
+    Prix Unitaire (€): 
+    Quantité: 
+    Sous-total (€):

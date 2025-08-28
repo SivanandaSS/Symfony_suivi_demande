@@ -41,10 +41,14 @@ class DemandeCrudController extends AbstractCrudController
     {
         return [
            
-            TextField::new('nom'),
-            TextField::new('prenom'),
-            TextField::new('description'),
-            AssociationField::new('category'),
+            TextField::new('nom')
+                ->setLabel('demande.Nom'),
+            TextField::new('prenom')
+                ->setLabel('demande.Prénom'),
+            TextField::new('description')
+                ->setLabel('demande.Description'),
+            AssociationField::new('category')
+                ->setLabel('demande.Catégorie'),
             
             
         ];
