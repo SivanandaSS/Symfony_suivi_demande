@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Uid\Uuid;
 
 final class RegisterController extends AbstractController
 {
@@ -31,10 +32,25 @@ final class RegisterController extends AbstractController
         $user->setPassword(
             $passwordHasher->hashPassword($user, $data['password'])
         );
+        $token = Uuid::v4()->toRfc4122(); // somehow create an API token for $user
+
+        $user->setApiKey($token);
 
         $entityManager->persist($user);
         $entityManager->flush();
 
-        return new JsonResponse(['message' => 'User registered successfully'], 201);
+        return new JsonResponse([
+            'message' => 'User registered successfully',
+            'token'   => $token,
+            'user'    => [
+                'id'     => $user->getId(),
+                'email'  => $user->getEmail(),
+                'nom'    => $user->getNom(),
+                'prénom' => $user->getPrénom(),
+                'roles'  => $user->getRoles(),
+                'password' => $user->getPassword(),
+                'apiKey' => $user->getApiKey(),
+            ]
+        ], 201);
     }
 }
