@@ -4,19 +4,19 @@
 
 {% block body %}
 <div class="container mt-4">
-    <h1 class="mb-4">Liste des Factures</h1>
+    <h1 class="mb-4">{{'Liste des Factures'|trans}}</h1>
 
     {# Tableau des factures #}
     <table class="table table-dark table-striped">
         <thead class="table-dark">
             <tr>
                 <th>#</th>
-                <th>Numéro</th>
-                <th>Date</th>
-                <th>Total (€)</th>
-                <th>Devis associé</th>
-                <th>Statut</th>
-                <th>Actions</th>
+                <th>{{'Numéro'|trans}}</th>
+                <th>{{'Date'|trans}}</th>
+                <th>{{'Total'|trans}} (€)</th>
+                <th>{{'Devis associé'|trans}}</th>
+                <th>{{'Statut'|trans}}</th>
+                <th>{{'Actions'|trans}}</th>
             </tr>
         </thead>
         <tbody>
@@ -30,19 +30,19 @@
                     {% if facture.devis %}
                         {{ facture.devis.numero }}
                     {% else %}
-                        <span class="text-muted">Aucun</span>
+                        <span class="text-muted">{{'Aucun'|trans}}</span>
                     {% endif %}
                 </td>
                 <td>
                     {{facture.paiement }}
                 </td>
                 <td>
-                    <a href="{{ path('facture_show', {'id': facture.id}) }}" class="btn btn-primary">Voir</a>
+                    <a href="{{ path('facture_show', {'id': facture.id}) }}" class="btn btn-primary">{{'Voir'|trans}}</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="7" class="text-center">Aucune facture trouvée.</td>
+                <td colspan="7" class="text-center">{{'Aucune facture trouvée'|trans}}</td>
             </tr>
         {% endfor %}
         </tbody>

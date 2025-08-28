@@ -32,6 +32,31 @@ demande:
     Le devis avec prestation: Le devis avec prestation
     Les devis avec prestations: Les devis avec prestations
     Prestation: Prestation
+    Prestations: Prestations
     Prix Unitaire (€): Prix Unitaire (€)
     Quantité: Quantité
     Sous-total (€): Sous-total (€)
+    missing credentials:
+    Logged out successfully:
+    Facture non trouvée: Facture non trouvée
+    Liste des Factures: Liste des Factures
+    Date: Date
+    Total: Total
+    Devis associé: Devis associé
+    Statut: Statut
+    Actions: Actions
+    Aucun: Aucun
+    Voir: Voir
+    Aucune facture trouvée: Aucune facture trouvée
+    Adresse de l'Entreprise: Adresse de l'Entreprise
+    Facture:
+    Date d'émission: Date d'émission
+    Facturé à: Facturé à
+    Détails des prestations: Détails des prestations
+    Aucune prestation trouvée: Aucune prestation trouvée
+    Merci pour votre confiance: Merci pour votre confiance
+    Retour à la liste: Retour à la liste
+    Informations Facture: Informations Facture
+    Client: Client
+    Devis associé: Devis associé
+    Exporter en PDF: Exporter en PDF

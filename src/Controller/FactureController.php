@@ -58,7 +58,7 @@ final class FactureController extends AbstractController
         $facture = $entityManager->getRepository(Facture::class)->find($id);
         
         if (!$facture) {
-            throw $this->createNotFoundException('Facture non trouvée');
+            throw $this->createNotFoundException('demande.Facture non trouvée');
         }
         // Désactive la barre de debug si elle est active
         if ($this->container->has('profiler')) {
