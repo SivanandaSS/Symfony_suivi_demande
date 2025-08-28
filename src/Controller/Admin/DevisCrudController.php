@@ -50,8 +50,8 @@ class DevisCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setEntityLabelInSingular('Le devis')
-            ->setEntityLabelInPlural('Les devis')
+            ->setEntityLabelInSingular('demande.Le devis')
+            ->setEntityLabelInPlural('demande.Les devis')
             ->setSearchFields(['nom', 'numero'])
             ->setDefaultSort(['id' => 'ASC'])
         ;
@@ -78,7 +78,7 @@ class DevisCrudController extends AbstractCrudController
 
         // Créer le numéro
         $devis->setNumero($year . $nextNumber);
-        $devis->setStatut("En attente");
+        $devis->setStatut("demande.En attente");
         return $devis;
         
     }
