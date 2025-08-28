@@ -58,9 +58,8 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('demande.Les demandes', 'fas fa-list', Demande::class);
         yield MenuItem::linkToCrud('demande.Les catégories', 'fas fa-tag', Category::class);
         yield MenuItem::linkToCrud('demande.Les devis', 'fas fa-list', Devis::class);
-        yield MenuItem::linkToCrud('demande.Les factures', 'fas fa-list', Facture::class);
         yield MenuItem::linkToCrud('demande.Les prestations', 'fas fa-list', Prestation::class);
-        yield MenuItem::linkToCrud('demande.Les prestations des devis', 'fas fa-list', DevisPrestation::class);
+        
         
     }
 }

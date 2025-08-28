@@ -1,6 +1,7 @@
 demande:
     Les demandes: Requests
     La demande: Request
+    Demande: Request
     Les catégories: Categories
     Categorie: Category
     Les devis: Quotations
@@ -11,7 +12,6 @@ demande:
     Nom: Last name
     Prenom: First name
     Prénom: First name
-    Categorie: Category
     Filtres: Filtres
     Créer La demande: Create a request
     Créer "La demande": Create a request
@@ -39,10 +39,11 @@ demande:
     Le devis avec prestation: The estimate with service
     Les devis avec prestations: The estimates with services
     Prestation: Service
-    Prestations:Services
-    Prix Unitaire (€): Unit price
+    Prestations: Services
+    Prix Unitaire (€): Unit price (€)
     Quantité: Quantity
-    Sous-total (€): Sub-total
+    Sous-total (€): Sub-total (€)
+    Total (€): Total (€)
     missing credentials: missing credentials
     Logged out successfully: Logged out successfully
     Facture non trouvée: Bill not found
@@ -65,5 +66,4 @@ demande:
     Retour à la liste: Return to list
     Informations Facture: Bille information
     Client: Client
-    Devis associé: Associated quote
     Exporter en PDF: Generate to PDF
