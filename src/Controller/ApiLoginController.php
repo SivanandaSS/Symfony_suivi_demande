@@ -57,7 +57,7 @@ final class ApiLoginController extends AbstractController
     {
         if (null === $user) {
             return $this->json([
-                'message' => 'missing credentials',
+                'message' => 'demande.missing credentials',
             ], Response::HTTP_UNAUTHORIZED);
         }
     
@@ -66,7 +66,7 @@ final class ApiLoginController extends AbstractController
         $entityManager->flush();
     
         return $this->json([
-            'message' => 'Logged out successfully'
+            'message' => 'demande.Logged out successfully'
         ]);
     }
 

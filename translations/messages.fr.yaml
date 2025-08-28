@@ -9,7 +9,7 @@ demande:
     Requests: Les demandes 
     Request: La demande
     Categories: Les catégories 
-    Category: Catégorie 
+    Catégorie: Category
     Quotations: Les devis 
     Bills: Les factures
     The services: Les prestations 
@@ -17,7 +17,46 @@ demande:
     La demande: La demande
     Les catégories: Les catégories
     Les devis: Les devis
+    Le devis: Le devis
     Les factures: Les factures
     Les prestations: Les prestations
-    Les devis_prestation: Service quote
     Tableau de bord: Tableau de bord
+    User registered successfully: Utilisateur enregistré avec succés
+    En attente: En attente
+    Prestations du devis: Prestations du devis
+    Les prestations des devis: Les prestations des devis
+    Prénom: Prénom
+    Nom: Nom
+    Description: Description
+    Numéro: Numéro
+    Le devis avec prestation: Le devis avec prestation
+    Les devis avec prestations: Les devis avec prestations
+    Prestation: Prestation
+    Prestations: Prestations
+    Prix Unitaire (€): Prix Unitaire (€)
+    Quantité: Quantité
+    Sous-total (€): Sous-total (€)
+    missing credentials:
+    Logged out successfully:
+    Facture non trouvée: Facture non trouvée
+    Liste des Factures: Liste des Factures
+    Date: Date
+    Total: Total
+    Devis associé: Devis associé
+    Statut: Statut
+    Actions: Actions
+    Aucun: Aucun
+    Voir: Voir
+    Aucune facture trouvée: Aucune facture trouvée
+    Adresse de l'Entreprise: Adresse de l'Entreprise
+    Facture:
+    Date d'émission: Date d'émission
+    Facturé à: Facturé à
+    Détails des prestations: Détails des prestations
+    Aucune prestation trouvée: Aucune prestation trouvée
+    Merci pour votre confiance: Merci pour votre confiance
+    Retour à la liste: Retour à la liste
+    Informations Facture: Informations Facture
+    Client: Client
+    Devis associé: Devis associé
+    Exporter en PDF: Exporter en PDF

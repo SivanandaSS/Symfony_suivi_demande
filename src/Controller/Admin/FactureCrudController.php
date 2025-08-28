@@ -21,8 +21,11 @@ class FactureCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id')->onlyOnIndex(),
-            TextField::new('numero'),
-            AssociationField::new('devis')->setCrudController(DevisCrudController::class),
+            TextField::new('numero')
+                ->setLabel('demande.Numero'),
+            AssociationField::new('devis')
+                ->setLabel('demande.Le devis')
+                ->setCrudController(DevisCrudController::class),
             
         ];
     }
