@@ -1,7 +1,9 @@
 demande:
     Les demandes: Requests
     La demande: Request
+    Demande: Request
     Les catégories: Categories
+    Categorie: Category
     Les devis: Quotations
     Le devis: Quotation
     Les factures: Bills
@@ -10,16 +12,15 @@ demande:
     Nom: Last name
     Prenom: First name
     Prénom: First name
-    Categorie: Category
     Filtres: Filtres
     Créer La demande: Create a request
     Créer "La demande": Create a request
     Créer et ajouter un nouvel élément: Create and add an element
     Créer: Create
     Tableau de bord: Dashboard
-    You are logged in as: You are logged in as 
-    Logout: Logout
-    Please sign in: Please sign in
+    Vous êtes connecter comme: You are logged in as 
+    Deconnexion: Logout
+    Se connecter: Please sign in
     Email: Email
     Password: Password
     Sign in: Sign in
@@ -30,39 +31,39 @@ demande:
     Bills: Bills
     The services: The services 
     Description: Description
-    En attente:
+    En attente: Waiting
     Prestations du devis: Service quote
-    Les prestations des devis:
+    Les prestations des devis: The service of quotes
     Catégorie: Category
     Numéro: Number
-    Le devis avec prestation:
-    Les devis avec prestations:
-    Prestation: 
-    Prestations:
-    Prix Unitaire (€): 
-    Quantité: 
-    Sous-total (€):
+    Le devis avec prestation: The estimate with service
+    Les devis avec prestations: The estimates with services
+    Prestation: Service
+    Prestations: Services
+    Prix Unitaire (€): Unit price (€)
+    Quantité: Quantity
+    Sous-total (€): Sub-total (€)
+    Total (€): Total (€)
     missing credentials: missing credentials
     Logged out successfully: Logged out successfully
-    Facture non trouvée:
-    Liste des Factures:
+    Facture non trouvée: Bill not found
+    Liste des Factures: List of Bills
     Date: Date
     Total: Total
-    Devis associé:
+    Devis associé: Associated quote
     Statut: Status
     Actions: Actions
     Aucun: None
     Voir: See
-    Aucune facture trouvée:
-    Adresse de l'Entreprise:
-    Facture:
-    Date d'émission:
-    Facturé à:
-    Détails des prestations:
-    Aucune prestation trouvée:
-    Merci pour votre confiance:
-    Retour à la liste:
-    Informations Facture:
+    Aucune facture trouvée: Bill not found
+    Adresse de l'Entreprise: Company address
+    Facture: Bill
+    Date d'émission: Issue date
+    Facturé à: Billed to
+    Détails des prestations: The service details
+    Aucune prestation trouvée: Service not found
+    Merci pour votre confiance: Thank you for your trust
+    Retour à la liste: Return to list
+    Informations Facture: Bille information
     Client: Client
-    Devis associé:
-    Exporter en PDF:
+    Exporter en PDF: Generate to PDF

@@ -22,7 +22,7 @@ class FactureCrudController extends AbstractCrudController
         return [
             IdField::new('id')->onlyOnIndex(),
             TextField::new('numero')
-                ->setLabel('demande.Numero'),
+                ->setLabel('demande.Numéro'),
             AssociationField::new('devis')
                 ->setLabel('demande.Le devis')
                 ->setCrudController(DevisCrudController::class),

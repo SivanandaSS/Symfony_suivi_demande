@@ -78,7 +78,7 @@ class DevisCrudController extends AbstractCrudController
 
         // Créer le numéro
         $devis->setNumero($year . $nextNumber);
-        $devis->setStatut("demande.En attente");
+        $devis->setStatut("En attente");
         return $devis;
         
     }
@@ -90,17 +90,22 @@ class DevisCrudController extends AbstractCrudController
             IdField::new('id')->onlyOnIndex(),
             DateField::new('dateDevis')
                 // ->setFormTypeOption('data', new \DateTime())
-                ->setFormTypeOption('disabled', true),
+                ->setFormTypeOption('disabled', true)
+                ->setLabel('demande.Date'),
 
             TextField::new('numero')
-                ->setFormTypeOption('disabled', true),
+                ->setFormTypeOption('disabled', true)
+                ->setLabel('demande.Numéro'),
+
             TextField::new('statut')
-                ->setFormTypeOption('disabled', true),
+                
+                ->setLabel('demande.Statut'),
 
             NumberField::new('total')
-                ->setLabel('Total (€)'),
+                ->setLabel('demande.Total (€)'),
 
             AssociationField::new('demande')->setCrudController(DemandeCrudController::class)
+                ->setLabel('demande.Demande')
                 ->setFormTypeOptions([
                     'choice_label' => function ($demande) {
                         return $demande->getNom() . '  ' .$demande->getPrenom(). ' - ' .$demande->getDescription();
@@ -109,7 +114,7 @@ class DevisCrudController extends AbstractCrudController
 
             CollectionField::new('devisPrestations')
                 ->useEntryCrudForm(DevisPrestationCrudController::class)
-                ->setLabel('Prestations du devis')
+                ->setLabel('demande.Prestations du devis')
                 ->onlyOnForms()
         ];
     }
