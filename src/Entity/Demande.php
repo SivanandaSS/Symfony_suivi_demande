@@ -33,7 +33,7 @@ class Demande
     
     private ?string $prenom = null;
 
-    #[ORM\Column(length: 200)]
+    #[ORM\Column(length: 500)]
     
     private ?string $description = null;
 
