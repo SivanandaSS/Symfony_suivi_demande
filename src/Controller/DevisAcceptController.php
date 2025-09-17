@@ -14,8 +14,9 @@ final class DevisAcceptController extends AbstractController
     {
         // Mettre à jour le statut du devis
         $data->setStatut('Accepter');
-        $em->persist($data);
+        //$em->persist($data);
         $em->flush();
+        
 
         // Récupérer la facture générée par le trigger (via devis_id)
         $facture = $factureRepository->findOneBy(['devis' => $data->getId()]);

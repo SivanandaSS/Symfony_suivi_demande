@@ -22,8 +22,18 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Get(normalizationContext: ['groups' => 'devis:item']),
         new GetCollection(normalizationContext: ['groups' => 'devis:list']),
         new Patch(
+            normalizationContext: ['groups' => 'devis:item'],
+            denormalizationContext: ['groups' => 'devis:write']
+        ),
+        new Patch(
             uriTemplate: '/devis/{id}/accepter',
             controller: DevisAcceptController::class,
+            read: true,             // charge l’entité Devis à partir de l’ID
+            deserialize: false,     // NE tente PAS de désérialiser un body (puisqu’on n’en envoie pas)
+            validate: false,        // évite une validation inutile
+            name: 'devis_accept',
+            normalizationContext: ['groups' => ['devis:item']],
+            
         ),
     ],
     order: ['numero' => 'DESC'],
@@ -62,7 +72,7 @@ class Devis
     private ?string $numero = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['devis:list', 'devis:item'])]
+    #[Groups(['devis:list', 'devis:write'])]
     private ?string $statut = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
@@ -74,7 +84,7 @@ class Devis
 
     public function __construct()
     {
-        $this->prestation = new ArrayCollection();
+        //$this->prestation = new ArrayCollection();
         $this->devisPrestations = new ArrayCollection();
         $this->dateDevis = (new \DateTime())->setTime(0, 0);
     }
